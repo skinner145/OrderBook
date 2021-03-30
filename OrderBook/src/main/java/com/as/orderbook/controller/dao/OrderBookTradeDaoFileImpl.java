@@ -5,6 +5,7 @@
  */
 package com.as.orderbook.controller.dao;
 
+import com.as.orderbook.dto.Trade;
 import java.util.*;
 
 /**
@@ -16,7 +17,7 @@ public class OrderBookTradeDaoFileImpl implements OrderBookTradeDao{
     
     @Override
     public Trade addTrade(String tradeId, Trade trade){
-        return trades.puth(tradeId, trade);
+        return trades.put(tradeId, trade);
     }
     
     @Override

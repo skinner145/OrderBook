@@ -5,6 +5,7 @@
  */
 package com.as.orderbook.controller.dao;
 
+import com.as.orderbook.dto.Trade;
 import java.util.*;
 
 /**

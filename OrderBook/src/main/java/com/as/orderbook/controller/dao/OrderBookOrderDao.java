@@ -5,6 +5,9 @@
  */
 package com.as.orderbook.controller.dao;
 
+import com.as.orderbook.dto.Order;
+import java.util.List;
+
 /**
  *
  * @author Skininho
