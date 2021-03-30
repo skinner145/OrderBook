@@ -71,7 +71,8 @@ public class Order {
         this.quantity = quantity;
     }
 
-    public Order(BigDecimal price, Integer quantity) {
+    public Order(String ID, BigDecimal price, Integer quantity) {
+        this.ID = ID;
         this.price = price;
         this.quantity = quantity;
     }
