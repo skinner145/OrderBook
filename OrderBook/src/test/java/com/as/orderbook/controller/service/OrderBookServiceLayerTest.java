@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
  * @author Jane
  */
 public class OrderBookServiceLayerTest { //Fairly minimal, as majority of methods in the service layer are just wrapping methods from the DAO
-    OrderBookServiceLayer service;
+    OrderBookServiceLayer service = new OrderBookServiceLayerImpl(new OrderBookOrderDaoFileImpl(), new OrderBookTradeDaoFileImpl());
     BuyOrder testBuyOrder1 = new BuyOrder(BigDecimal.ONE, 123);
     BuyOrder testBuyOrder2 = new BuyOrder(BigDecimal.TEN, 456);
     List<BuyOrder> buyOrderList = new ArrayList<>();
@@ -40,7 +40,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     
     @BeforeEach
     public void setUp() {
-        service = new OrderBookServiceLayerImpl(new OrderBookOrderDaoFileImpl(), new OrderBookTradeDaoFileImpl());
+        service.clearService();
         buyOrderList.clear();
         buyOrderList.add(testBuyOrder1);
         buyOrderList.add(testBuyOrder2);
@@ -53,14 +53,12 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     }
 
     @Test
-    public void testCreateOrders() { //Also tests getAllOrders
+    public void testIsSorted() { //Also tests getAllOrders
         service.createOrders();
         Boolean isSorted = true;
         int i = 0;
         List<Order> buyOrderList = service.getAllOrders().get(0);
         List<Order> sellOrderList = service.getAllOrders().get(1);
-        assertEquals(1000, buyOrderList.size(), "Didn't create 1000 buy orders");
-        assertEquals(1000, sellOrderList.size(), "Didn't create 1000 sell orders");
         
         for (i = 1; i < 1000; i++) {
             if (buyOrderList.get(i).getPrice().compareTo(buyOrderList.get(i - 1).getPrice()) == -1) {
@@ -80,6 +78,30 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         assertTrue(isSorted, "Sell orders aren't sorted");
     }
     
-    
-    
+    @Test
+    public void testStats() {
+        service.createOrders();
+        Boolean isValid = false;
+        assertEquals(1000, service.getNumOfBuyOrders(), "Didn't create 1000 buy orders");
+        assertEquals(1000, service.getNumOfSellOrders(), "Didn't create 1000 sell orders");
+        if (service.getSellQuantity() >= 20000 && service.getSellQuantity() <= 50000) { //Checking if the sell quantity is within a valid range
+            isValid = true;
+        }
+        assertTrue(isValid, "Sell quantity is not valid");
+        isValid = false;
+        if (service.getBuyQuantity() >= 20000 && service.getBuyQuantity() <= 50000) { //Checking if the sell quantity is within a valid range
+            isValid = true;
+        }
+        assertTrue(isValid, "Buy quantity is not valid");
+        isValid = false;
+        if (service.getAverageSellPrice().compareTo(new BigDecimal(20)) > -1 && service.getAverageSellPrice().compareTo(new BigDecimal(50)) < 1) { //Checking if the average sell price is within a valid range
+            isValid = true;
+        }
+        assertTrue(isValid, "Average sell quantity is not valid");
+        isValid = false;
+        if (service.getAverageBuyPrice().compareTo(new BigDecimal(20)) > -1 && service.getAverageBuyPrice().compareTo(new BigDecimal(50)) < 1) { //Checking if the average buy price is within a valid range
+            isValid = true;
+        }
+        assertTrue(isValid, "Average buy quantity is not valid");
+    }
 }
