@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  *
  * @author Jane
@@ -36,7 +37,12 @@ public class OrderBookDaoTest {
 
     @Test
     public void testAdd() {
-        
+        orderDao.addOrder(testBuyOrder1.getID(), testBuyOrder1);
+        orderDao.addOrder(testSellOrder1.getID(), testSellOrder1);
+        tradeDao.addTrade(testTrade1.getID(), testTrade1);
+        assertEquals(testBuyOrder1, orderDao.getOrder(testBuyOrder1.getID()), "Added buy order was not equal");
+        assertEquals(testSellOrder1, orderDao.getOrder(testSellOrder1.getID()), "Added sell order was not equal");
+        assertEquals(testTrade1, tradeDao.getTrade(testTrade1.getID()), "Added trade was not equal");
     }
     
 }
