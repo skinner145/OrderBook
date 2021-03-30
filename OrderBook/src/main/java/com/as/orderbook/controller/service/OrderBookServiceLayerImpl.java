@@ -186,4 +186,52 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         buyOrders.clear();
         sellOrders.clear();
     }
+    
+    @Override
+    public boolean checkIfEmpty(){
+        if(buyOrders.size() > 0 && sellOrders.size() > 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    
+    @Override
+    public Trade matchOrder(){
+        getAllOrders();
+        Order buy = buyOrders.get(0);
+        Order sell = sellOrders.get(0);
+        int quantity = getSmallest(buy.getQuantity(), sell.getQuantity());
+        BigDecimal price = sell.getPrice();
+        buy.setQuantity(buy.getQuantity() - quantity);
+        sell.setQuantity(sell.getQuantity() - quantity);
+        updateAfterMatch(buy, sell);
+        Trade trade = new Trade(buy, sell, price);
+        return tradeDao.addTrade(trade.getID(), trade);
+    }
+    
+    @Override
+    public void matchAllOrders(){
+        
+    }
+    
+    public void updateAfterMatch(Order buy, Order sell){
+        if(buy.getQuantity() == 0){
+            orderDao.removeOrder(buy.getID());
+            orderDao.editOrder(sell.getID(), sell);
+        }
+        else{
+            orderDao.removeOrder(sell.getID());
+            orderDao.editOrder(buy.getID(), buy);
+        }
+    }
+    
+    public int getSmallest(int a, int b){
+        if(a > b){
+            return b;
+        }else{
+            return a;
+        }
+    }
 }

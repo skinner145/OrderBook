@@ -34,4 +34,7 @@ public interface OrderBookServiceLayer {
     BigDecimal getAverageBuyPrice();
     String displayStats();
     void clearService();
+    boolean checkIfEmpty();
+    Trade matchOrder();
+    void matchAllOrders();
 }
