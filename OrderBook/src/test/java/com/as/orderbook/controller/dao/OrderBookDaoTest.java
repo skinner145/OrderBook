@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  *
@@ -20,11 +22,14 @@ public class OrderBookDaoTest {
     OrderBookOrderDao orderDao = new OrderBookOrderDaoFileImpl();
     BuyOrder testBuyOrder1 = new BuyOrder(BigDecimal.ONE, 123);
     BuyOrder testBuyOrder2 = new BuyOrder(BigDecimal.TEN, 456);
+    List<BuyOrder> buyOrderList = new ArrayList<>();
     SellOrder testSellOrder1 = new SellOrder(new BigDecimal("1.1"), 120);
     SellOrder testSellOrder2 = new SellOrder(new BigDecimal("9.9"), 460);
+    List<SellOrder> sellOrderList = new ArrayList<>();
     OrderBookTradeDao tradeDao = new OrderBookTradeDaoFileImpl();
     Trade testTrade1 = new Trade(testBuyOrder1, testSellOrder1, BigDecimal.ONE);
     Trade testTrade2 = new Trade(testBuyOrder2, testSellOrder2, new BigDecimal("9.9"));
+    List<Trade> tradeList = new ArrayList<>();
     
     public OrderBookDaoTest() {
     }
@@ -33,6 +38,15 @@ public class OrderBookDaoTest {
     public void setUp() { //returns the test dao to a blank state before each test
         orderDao.clearDao();
         tradeDao.clearDao();
+        buyOrderList.clear();
+        buyOrderList.add(testBuyOrder1);
+        buyOrderList.add(testBuyOrder2);
+        sellOrderList.clear();
+        sellOrderList.add(testSellOrder1);
+        sellOrderList.add(testSellOrder2);
+        tradeList.clear();
+        tradeList.add(testTrade1);
+        tradeList.add(testTrade2);
     }
 
     @Test
@@ -43,6 +57,11 @@ public class OrderBookDaoTest {
         assertEquals(testBuyOrder1, orderDao.getOrder(testBuyOrder1.getID()), "Added buy order was not equal");
         assertEquals(testSellOrder1, orderDao.getOrder(testSellOrder1.getID()), "Added sell order was not equal");
         assertEquals(testTrade1, tradeDao.getTrade(testTrade1.getID()), "Added trade was not equal");
+    }
+    
+    @Test
+    public void testGetAll() {
+        
     }
     
 }
