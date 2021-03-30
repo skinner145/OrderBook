@@ -14,6 +14,7 @@ import java.util.List;
  * @author Skininho
  */
 public interface OrderBookServiceLayer {
+    void createOrders();
     Order addOrder(String orderId, Order order);
     Order getOrder(String orderId);
     List<List<Order>> getAllOrders();

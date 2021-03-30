@@ -11,10 +11,12 @@ import com.as.orderbook.dto.BuyOrder;
 import com.as.orderbook.dto.Order;
 import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  *
@@ -24,11 +26,25 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     private OrderBookOrderDao orderDao;
     private OrderBookTradeDao tradeDao;
     
+    Random rand = new Random();
     //constructor
     public OrderBookServiceLayerImpl(OrderBookOrderDao orderDao, OrderBookTradeDao tradeDao){
         this.orderDao = orderDao;
         this.tradeDao = tradeDao;
     }
+    
+    @Override
+    public void createOrders(){
+        for(int i = 0; i < 1000; i++){
+            Order buyOrder = new BuyOrder(new BigDecimal(getRandomNum(190)),
+                    getRandomNum(20, 50));
+            Order sellOrder = new SellOrder(new BigDecimal(getRandomNum(190)),
+                    getRandomNum(20, 50));
+            orderDao.addOrder(buyOrder.getID(), buyOrder);
+            orderDao.addOrder(sellOrder.getID(), sellOrder);
+        }
+    }
+    
     @Override
     public Order addOrder(String orderId, Order newOrder){
         return orderDao.addOrder(orderId, newOrder);
@@ -91,5 +107,12 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     @Override
     public Trade editTrade(String tradeId, Trade editedTrade){
         return tradeDao.editTrade(tradeId, editedTrade);
+    }
+    
+    public int getRandomNum(int min, int max){
+        return rand.nextInt((max+1) - min ) + min;
+    }
+    public double getRandomNum(int min){
+        return rand.nextDouble() + min;
     }
 }
