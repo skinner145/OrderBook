@@ -39,4 +39,9 @@ public class OrderBookOrderDaoFileImpl implements OrderBookOrderDao{
     public Order editOrder(String orderId, Order editedOrder){
         return orders.replace(orderId, editedOrder);
     }
+
+    @Override
+    public void clearDao() {
+        orders.clear();
+    }
 }
