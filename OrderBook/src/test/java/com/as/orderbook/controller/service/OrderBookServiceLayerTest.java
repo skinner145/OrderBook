@@ -13,6 +13,7 @@ import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,8 +51,10 @@ public class OrderBookServiceLayerTest {
     }
 
     @Test
-    public void testAdd() {
-        
+    public void testCreateOrders() {
+        service.createOrders();
+        assertEquals(1000, service.getAllOrders().get(0).size(), "Didn't create 1000 buy orders");
+        assertEquals(1000, service.getAllOrders().get(1).size(), "Didn't create 1000 sell orders");
     }
     
 }
