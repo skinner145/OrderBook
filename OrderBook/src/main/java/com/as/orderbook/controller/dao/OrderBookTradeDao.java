@@ -18,4 +18,5 @@ public interface OrderBookTradeDao {
     List<Trade> getAllTrades();
     Trade removeTrade(String tradeId);
     Trade editTrade(String tradeId, Trade editedTrade);
+    void clearDao();
 }

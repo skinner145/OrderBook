@@ -18,4 +18,5 @@ public interface OrderBookOrderDao {
     List<Order> getAllOrders();
     Order removeOrder(String orderId);
     Order editOrder(String orderId, Order editedOrder);
+    void clearDao();
 }

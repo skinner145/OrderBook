@@ -7,7 +7,10 @@ package com.as.orderbook.controller.service;
 
 import com.as.orderbook.controller.dao.OrderBookOrderDao;
 import com.as.orderbook.controller.dao.OrderBookTradeDao;
+import com.as.orderbook.dto.BuyOrder;
 import com.as.orderbook.dto.Order;
+import com.as.orderbook.dto.SellOrder;
+import com.as.orderbook.dto.Trade;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +41,13 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     @Override
     public List<Order> getAllOrders(){
-        return orderDao.getAllOrders();
+        List<Order> orders = orderDao.getAllOrders();
+        List<BuyOrder> buyOrders = new ArrayList<>();
+        List<SellOrder> sellOrders = new ArrayList<>();
+        for(Order order : orders){
+            
+        }
+        return orders;
     }
     
     @Override
