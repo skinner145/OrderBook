@@ -61,7 +61,18 @@ public class OrderBookDaoTest {
     
     @Test
     public void testGetAll() {
+        orderDao.addOrder(testBuyOrder1.getID(), testBuyOrder1);
+        orderDao.addOrder(testBuyOrder2.getID(), testBuyOrder2);
+        assertEquals(buyOrderList, orderDao.getAllOrders(), "Added buy orders were either incorrect or in the wrong order");
+        orderDao.clearDao();
         
+        orderDao.addOrder(testSellOrder1.getID(), testSellOrder1);
+        orderDao.addOrder(testSellOrder2.getID(), testSellOrder2);
+        assertEquals(sellOrderList, orderDao.getAllOrders(), "Added sell orders were either incorrect or in the wrong order");
+        
+        tradeDao.addTrade(testTrade1.getID(), testTrade1);
+        tradeDao.addTrade(testTrade2.getID(), testTrade2);
+        assertEquals(tradeList, tradeDao.getAllTrades(), "Added trades were either incorrect or in the wrong order");
     }
     
 }
