@@ -8,12 +8,14 @@ package com.as.orderbook.controller.service;
 import com.as.orderbook.controller.dao.OrderBookOrderDaoFileImpl;
 import com.as.orderbook.controller.dao.OrderBookTradeDaoFileImpl;
 import com.as.orderbook.dto.BuyOrder;
+import com.as.orderbook.dto.Order;
 import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +23,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Jane
  */
-public class OrderBookServiceLayerTest {
+public class OrderBookServiceLayerTest { //Fairly minimal, as majority of methods in the service layer are just wrapping methods from the DAO
     OrderBookServiceLayer service;
     BuyOrder testBuyOrder1 = new BuyOrder(BigDecimal.ONE, 123);
     BuyOrder testBuyOrder2 = new BuyOrder(BigDecimal.TEN, 456);
@@ -51,10 +53,33 @@ public class OrderBookServiceLayerTest {
     }
 
     @Test
-    public void testCreateOrders() {
+    public void testCreateOrders() { //Also tests getAllOrders
         service.createOrders();
-        assertEquals(1000, service.getAllOrders().get(0).size(), "Didn't create 1000 buy orders");
-        assertEquals(1000, service.getAllOrders().get(1).size(), "Didn't create 1000 sell orders");
+        Boolean isSorted = true;
+        int i = 0;
+        List<Order> buyOrderList = service.getAllOrders().get(0);
+        List<Order> sellOrderList = service.getAllOrders().get(1);
+        assertEquals(1000, buyOrderList.size(), "Didn't create 1000 buy orders");
+        assertEquals(1000, sellOrderList.size(), "Didn't create 1000 sell orders");
+        
+        for (i = 1; i < 1000; i++) {
+            if (buyOrderList.get(i).getPrice().compareTo(buyOrderList.get(i - 1).getPrice()) == -1) {
+                isSorted = false;
+                break;
+            }
+        }
+        assertTrue(isSorted, "Buy orders aren't sorted");
+        isSorted = true;
+        
+        for (i = 1; i < 1000; i++) {
+            if (sellOrderList.get(i).getPrice().compareTo(sellOrderList.get(i - 1).getPrice()) == -1) {
+                isSorted = false;
+                break;
+            }
+        }
+        assertTrue(isSorted, "Sell orders aren't sorted");
     }
+    
+    
     
 }
