@@ -105,4 +105,6 @@ public class OrderBookDaoTest {
         tradeDao.editTrade(testTrade1.getID(), testTrade2);
         assertEquals(testTrade2, tradeDao.getTrade(testTrade1.getID()), "Trade was not successfully updated");
     }
+    
+    
 }
