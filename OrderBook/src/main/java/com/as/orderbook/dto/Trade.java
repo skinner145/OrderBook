@@ -7,6 +7,7 @@ package com.as.orderbook.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  *
@@ -33,5 +34,71 @@ public class Trade {
         this.ID = "TRADE" + this.quantityFilled + LocalDateTime.now().toString();
         Double endTime = (double)System.nanoTime();
         this.executionTime = (endTime - startTime) / 1000000; //Getting the execution time of the constructor
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public Double getExecutionTime() {
+        return executionTime;
+    }
+
+    public Integer getQuantityFilled() {
+        return quantityFilled;
+    }
+
+    public BigDecimal getExecutedPrice() {
+        return executedPrice;
+    }
+
+    public BuyOrder getBuyOrder() {
+        return buyOrder;
+    }
+
+    public SellOrder getSellOrder() {
+        return sellOrder;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + Objects.hashCode(this.ID);
+        hash = 11 * hash + Objects.hashCode(this.executionTime);
+        hash = 11 * hash + Objects.hashCode(this.quantityFilled);
+        hash = 11 * hash + Objects.hashCode(this.executedPrice);
+        hash = 11 * hash + Objects.hashCode(this.buyOrder);
+        hash = 11 * hash + Objects.hashCode(this.sellOrder);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Trade other = (Trade) obj;
+        if (!Objects.equals(this.ID, other.ID)) {
+            return false;
+        }
+        if (!Objects.equals(this.executionTime, other.executionTime)) {
+            return false;
+        }
+        if (!Objects.equals(this.quantityFilled, other.quantityFilled)) {
+            return false;
+        }
+        if (!Objects.equals(this.executedPrice, other.executedPrice)) {
+            return false;
+        }
+        if (!Objects.equals(this.buyOrder, other.buyOrder)) {
+            return false;
+        }
+        return Objects.equals(this.sellOrder, other.sellOrder);
     }
 }
