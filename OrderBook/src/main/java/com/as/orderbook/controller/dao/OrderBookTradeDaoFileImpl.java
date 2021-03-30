@@ -39,7 +39,6 @@ public class OrderBookTradeDaoFileImpl implements OrderBookTradeDao{
     public Trade editTrade(String tradeId, Trade editedTrade){
         return trades.replace(tradeId, editedTrade);
     }
-
     @Override
     public void clearDao() {
         trades.clear();
