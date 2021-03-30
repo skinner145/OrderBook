@@ -18,10 +18,10 @@ public class Trade {
     private Double executionTime;
     private Integer quantityFilled;
     private BigDecimal executedPrice;
-    private BuyOrder buyOrder;
-    private SellOrder sellOrder;
+    private Order buyOrder;
+    private Order sellOrder;
 
-    public Trade(BuyOrder buyOrder, SellOrder sellOrder, BigDecimal executedPrice) {
+    public Trade(Order buyOrder, Order sellOrder, BigDecimal executedPrice) {
         Double startTime = (double)System.nanoTime();
         this.buyOrder = buyOrder;
         this.sellOrder = sellOrder;
@@ -52,11 +52,11 @@ public class Trade {
         return executedPrice;
     }
 
-    public BuyOrder getBuyOrder() {
+    public Order getBuyOrder() {
         return buyOrder;
     }
 
-    public SellOrder getSellOrder() {
+    public Order getSellOrder() {
         return sellOrder;
     }
 
