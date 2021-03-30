@@ -13,6 +13,8 @@ import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +71,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
             }
         }
         List<List<Order>> allOrders = new ArrayList<List<Order>>();
+        
+        buyOrders.sort((Order o1, Order o2) -> o1.getPrice().compareTo(o2.getPrice()));
+        sellOrders.sort((Order o1, Order o2) -> o1.getPrice().compareTo(o2.getPrice()));
         allOrders.add(buyOrders);
         allOrders.add(sellOrders);
         return allOrders;
