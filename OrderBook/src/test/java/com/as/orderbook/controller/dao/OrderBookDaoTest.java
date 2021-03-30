@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  *
  * @author Jane
@@ -73,6 +74,21 @@ public class OrderBookDaoTest {
         tradeDao.addTrade(testTrade1.getID(), testTrade1);
         tradeDao.addTrade(testTrade2.getID(), testTrade2);
         assertEquals(tradeList, tradeDao.getAllTrades(), "Added trades were either incorrect or in the wrong order");
+    }
+    
+    @Test
+    public void testRemove() { //Will automatically pass if add test fails, keep this in mind
+        orderDao.addOrder(testBuyOrder1.getID(), testBuyOrder1);
+        orderDao.removeOrder(testBuyOrder1.getID());
+        assertTrue(orderDao.getAllOrders().isEmpty(), "Buy order was not successfully removed");
+        
+        orderDao.addOrder(testSellOrder1.getID(), testSellOrder1);
+        orderDao.removeOrder(testSellOrder1.getID());
+        assertTrue(orderDao.getAllOrders().isEmpty(), "Sell order was not successfully removed");
+        
+        tradeDao.addTrade(testTrade1.getID(), testTrade1);
+        tradeDao.removeTrade(testTrade1.getID());
+        assertTrue(tradeDao.getAllTrades().isEmpty(), "Trade was not successfully removed");
     }
     
 }
