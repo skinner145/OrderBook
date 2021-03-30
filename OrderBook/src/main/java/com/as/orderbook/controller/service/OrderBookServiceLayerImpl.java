@@ -40,14 +40,22 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     }
     
     @Override
-    public List<Order> getAllOrders(){
+    public List<List<Order>> getAllOrders(){
         List<Order> orders = orderDao.getAllOrders();
-        List<BuyOrder> buyOrders = new ArrayList<>();
-        List<SellOrder> sellOrders = new ArrayList<>();
+        List<Order> buyOrders = new ArrayList<>();
+        List<Order> sellOrders = new ArrayList<>();
         for(Order order : orders){
-            
+            if(order instanceof BuyOrder){
+                buyOrders.add(order);
+            }
+            else{
+                sellOrders.add(order);
+            }
         }
-        return orders;
+        List<List<Order>> allOrders = new ArrayList<List<Order>>();
+        allOrders.add(buyOrders);
+        allOrders.add(sellOrders);
+        return allOrders;
     }
     
     @Override

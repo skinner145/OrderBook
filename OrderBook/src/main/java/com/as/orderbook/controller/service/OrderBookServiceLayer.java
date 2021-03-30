@@ -16,7 +16,7 @@ import java.util.List;
 public interface OrderBookServiceLayer {
     Order addOrder(String orderId, Order order);
     Order getOrder(String orderId);
-    List<Order> getAllOrders();
+    List<List<Order>> getAllOrders();
     Order removeOrder(String orderId);
     Order editOrder(String orderId, Order editedOrder);
     Trade addTrade(String tradeId, Trade trade);
