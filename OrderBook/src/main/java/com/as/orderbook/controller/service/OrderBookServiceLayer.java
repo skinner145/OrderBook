@@ -7,6 +7,7 @@ package com.as.orderbook.controller.service;
 
 import com.as.orderbook.dto.Order;
 import com.as.orderbook.dto.Trade;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -25,4 +26,12 @@ public interface OrderBookServiceLayer {
     List<Trade> getAllTrades();
     Trade removeTrade(String tradeId);
     Trade editTrade(String tradeId, Trade editedTrade);
+    int getNumOfSellOrders();
+    int getNumOfBuyOrders();
+    int getSellQuantity();
+    int getBuyQuantity();
+    BigDecimal getAverageSellPrice();
+    BigDecimal getAverageBuyPrice();
+    String displayStats();
+    void clearService();
 }

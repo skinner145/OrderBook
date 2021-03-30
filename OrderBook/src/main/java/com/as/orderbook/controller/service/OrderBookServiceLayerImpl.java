@@ -28,6 +28,10 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     private OrderBookOrderDao orderDao;
     private OrderBookTradeDao tradeDao;
     
+    List<Order> orders = orderDao.getAllOrders();
+    List<Order> buyOrders = new ArrayList<>();
+    List<Order> sellOrders = new ArrayList<>();
+    
     Random rand = new Random();
     //constructor
     public OrderBookServiceLayerImpl(OrderBookOrderDao orderDao, OrderBookTradeDao tradeDao){
@@ -59,17 +63,16 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     @Override
     public List<List<Order>> getAllOrders(){
-        List<Order> orders = orderDao.getAllOrders();
-        List<Order> buyOrders = new ArrayList<>();
-        List<Order> sellOrders = new ArrayList<>();
-        for(Order order : orders){
+        clearService();
+        
+        orders.forEach(order -> {
             if(order instanceof BuyOrder){
                 buyOrders.add(order);
             }
             else{
                 sellOrders.add(order);
             }
-        }
+        });
         List<List<Order>> allOrders = new ArrayList<List<Order>>();
         
         buyOrders.sort((Order o1, Order o2) -> o1.getPrice().compareTo(o2.getPrice()));
@@ -119,5 +122,68 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     }
     public double getRandomNum(int min){
         return rand.nextDouble() + min;
+    }
+
+    @Override
+    public int getNumOfSellOrders() {
+        return sellOrders.size();
+    }
+
+    @Override
+    public int getNumOfBuyOrders() {
+        return buyOrders.size();
+    }
+
+    @Override
+    public int getSellQuantity() {
+        int count = 0;
+        for(Order order : sellOrders){
+            count += order.getQuantity();
+        }
+        return count;
+    }
+
+    @Override
+    public int getBuyQuantity() {
+        int count = 0;
+        for(Order order : buyOrders){
+            count += order.getQuantity();
+        }
+        return count;
+    }
+
+    @Override
+    public BigDecimal getAverageSellPrice() {
+        BigDecimal price = new BigDecimal("0");
+        for(Order order : sellOrders){
+            price.add(order.getPrice());
+        }
+        return price.divide(new BigDecimal(getNumOfSellOrders()));
+    }
+
+    @Override
+    public BigDecimal getAverageBuyPrice() {
+        BigDecimal price = new BigDecimal("0");
+        for(Order order : buyOrders){
+            price.add(order.getPrice());
+        }
+        return price.divide(new BigDecimal(getNumOfBuyOrders()));
+    }
+    
+    @Override
+    public String displayStats(){
+        return "Number of Sell Orders: " + getNumOfSellOrders() + 
+                " - Number of Buy Orders: " + getNumOfBuyOrders() +
+                " - Overall Sell Quantity: " + getSellQuantity() + 
+                " - Overall Buy Quantity: " + getBuyQuantity() + 
+                " - Average Sale Price: " + getAverageSellPrice() +
+                " - Average Buy Price: " + getAverageBuyPrice();
+    }
+    
+    @Override
+    public void clearService(){
+        orders.clear();
+        buyOrders.clear();
+        sellOrders.clear();
     }
 }
