@@ -5,7 +5,9 @@
  */
 package com.as.orderbook.controller.service;
 
+import com.as.orderbook.dto.BuyOrder;
 import com.as.orderbook.dto.Order;
+import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.List;
 public interface OrderBookServiceLayer {
     void createOrders();
     Order addOrder(String orderId, Order order);
+    Order addBuyOrder(String orderId, Order order);
+    Order addSellOrder(String orderId, Order order);
     Order getOrder(String orderId);
     List<List<Order>> getAllOrders();
     Order removeOrder(String orderId);

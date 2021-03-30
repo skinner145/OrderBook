@@ -57,6 +57,16 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     }
 
     @Override
+    public Order addBuyOrder(String orderId, Order order){
+        return orderDao.addOrder(orderId, order);
+    }
+    
+    @Override
+    public Order addSellOrder(String orderId, Order order){
+        return orderDao.addOrder(orderId, order);
+    }
+    
+    @Override
     public Order getOrder(String orderId){
         return orderDao.getOrder(orderId);
     }
@@ -213,7 +223,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     @Override
     public void matchAllOrders(){
-        
+        while(!checkIfEmpty()){
+            matchOrder();
+        }
     }
     
     public void updateAfterMatch(Order buy, Order sell){
