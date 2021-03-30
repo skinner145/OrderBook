@@ -91,4 +91,18 @@ public class OrderBookDaoTest {
         assertTrue(tradeDao.getAllTrades().isEmpty(), "Trade was not successfully removed");
     }
     
+    @Test
+    public void testEdit() {
+        orderDao.addOrder(testBuyOrder1.getID(), testBuyOrder1);
+        orderDao.editOrder(testBuyOrder1.getID(), testBuyOrder2);
+        assertEquals(testBuyOrder2, orderDao.getOrder(testBuyOrder1.getID()), "Buy order was not successfully updated");
+        
+        orderDao.addOrder(testSellOrder1.getID(), testSellOrder1);
+        orderDao.editOrder(testSellOrder1.getID(), testSellOrder2);
+        assertEquals(testSellOrder2, orderDao.getOrder(testSellOrder1.getID()), "Sell order was not successfully updated");
+        
+        tradeDao.addTrade(testTrade1.getID(), testTrade1);
+        tradeDao.editTrade(testTrade1.getID(), testTrade2);
+        assertEquals(testTrade2, tradeDao.getTrade(testTrade1.getID()), "Trade was not successfully updated");
+    }
 }
