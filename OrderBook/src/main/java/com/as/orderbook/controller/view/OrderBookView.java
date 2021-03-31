@@ -70,4 +70,9 @@ public class OrderBookView {
     public void displayTrade(Trade trade){
         io.print(trade.getID());
     }
+    
+    public void displayError(String s){
+        io.print("===Error===");
+        io.print(s);
+    }
 }

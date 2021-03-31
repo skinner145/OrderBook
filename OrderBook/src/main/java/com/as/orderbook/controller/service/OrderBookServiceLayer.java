@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface OrderBookServiceLayer {
     //method for creating buy and sell orders
-    void createOrders(int orderNum);
+    void createOrders(int orderNum) throws OrderBookOrderException;
     //add order
     Order addOrder(String orderId, Order order);
     //add buy order
@@ -62,7 +62,7 @@ public interface OrderBookServiceLayer {
     //check if orderbook is empty
     boolean checkIfEmpty();
     //match order
-    Trade matchOrder();
+    Trade matchOrder() throws OrderBookTradeException;
     //match all orders
-    void matchAllOrders();
+    void matchAllOrders()throws OrderBookTradeException;
 }

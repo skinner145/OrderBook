@@ -43,21 +43,22 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
 
     //method that creates 1000 buy and sell orders
     @Override
-    public void createOrders(int orderNum){
+    public void createOrders(int orderNum) throws OrderBookOrderException{
         clearService();
         for(int i = 0; i < orderNum; i++){
-            
             Order buyOrder = new BuyOrder(new BigDecimal(getRandomNum(190)),
                     getRandomNum(20, 50));
             Order sellOrder = new SellOrder(new BigDecimal(getRandomNum(190)),
                     getRandomNum(20, 50));
+            validateObject(buyOrder);
+            validateObject(sellOrder);
             orderDao.addOrder(buyOrder.getID(), buyOrder);
             buyOrders.add(buyOrder);
             orderDao.addOrder(sellOrder.getID(), sellOrder);
             sellOrders.add(sellOrder);
         }
+        
         orders = orderDao.getAllOrders();
-        System.out.println(orders.size());
     }
     
     //add's order to map in dao
@@ -104,8 +105,8 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         //list that will be returned
         List<List<Order>> allOrders = new ArrayList<>();
         //sort lists
-        buyOrders.sort((Order o1, Order o2) -> o1.getPrice().compareTo(o2.getPrice()));
-        sellOrders.sort((Order o1, Order o2) -> o1.getPrice().compareTo(o2.getPrice()));
+        buyOrders.sort((Order o1, Order o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        sellOrders.sort((Order o1, Order o2) -> o2.getPrice().compareTo(o1.getPrice()));
         //add each list to allOrders list
         allOrders.add(buyOrders);
         allOrders.add(sellOrders);
@@ -249,7 +250,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //matches sell order with buy order
     @Override
-    public Trade matchOrder(){
+    public Trade matchOrder() throws OrderBookTradeException{
         //gets up-to-date list
         getAllOrders();
         //gets the buy and sell order with the highest price
@@ -267,6 +268,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         updateAfterMatch(buy, sell);
         //create trade object
         Trade trade = new Trade(buy, sell, price);
+        validateObject(trade);
         //add trade object in dao
         tradeDao.addTrade(trade.getID(), trade);
         return trade;
@@ -274,7 +276,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //method to match all orders
     @Override
-    public void matchAllOrders(){
+    public void matchAllOrders() throws OrderBookTradeException{
         //while buy and sell orders list is not empty
         while(!checkIfEmpty()){
             //match order method
@@ -305,6 +307,32 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
             return b;
         }else{
             return a;
+        }
+    }
+    
+    public void validateObject(Order order) throws OrderBookOrderException{
+        if(order.getID().isBlank()){
+            throw new OrderBookOrderException("Order ID cannot be blank");
+        }
+        if(order.getPrice().compareTo(BigDecimal.ZERO) != 1){
+            throw new OrderBookOrderException("Order price must be greater than zero");
+        }
+        if(order.getQuantity() <= 0){
+            throw new OrderBookOrderException("Order quantity must be greater than zero");
+        }
+    }
+    public void validateObject(Trade trade) throws OrderBookTradeException{
+        if(trade.getID().isBlank()){
+            throw new OrderBookTradeException("Trade ID cannot be blank");
+        }
+        if(trade.getExecutedPrice().compareTo(BigDecimal.ZERO) != 1){
+            throw new OrderBookTradeException("Execution price must be greater than 0");
+        }
+        if(trade.getQuantityFilled() <=0 ){
+            throw new OrderBookTradeException("Quantity filled must be greater than 0");
+        }
+        if(trade.getExecutionTime() == 0.0d){
+            throw new OrderBookTradeException("Execution Time cannot be null");
         }
     }
 }

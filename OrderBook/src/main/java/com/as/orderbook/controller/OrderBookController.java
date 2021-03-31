@@ -5,7 +5,10 @@
  */
 package com.as.orderbook.controller;
 
+import com.as.orderbook.controller.service.OrderBookOrderException;
+import com.as.orderbook.controller.service.OrderBookOrderIDException;
 import com.as.orderbook.controller.service.OrderBookServiceLayer;
+import com.as.orderbook.controller.service.OrderBookTradeException;
 import com.as.orderbook.controller.view.OrderBookView;
 import com.as.orderbook.dto.Order;
 import com.as.orderbook.dto.Trade;
@@ -28,7 +31,7 @@ public class OrderBookController {
         this.service = service;
     }
     
-    public void run() {
+    public void run() throws OrderBookOrderException, OrderBookTradeException{
         int input = 0;
         Boolean keepRunning = true;
         createOrders(1000);
@@ -70,16 +73,25 @@ public class OrderBookController {
             }
         }
     }
-    public void createOrders(int orderNum){
-        service.createOrders(orderNum);
+    public void createOrders(int orderNum)throws OrderBookOrderException{
+        try{
+            service.createOrders(orderNum);
+        }catch(OrderBookOrderException e){
+            view.displayError(e.getMessage());
+        }
+        
     }
     public void viewOrders(){
         List<List<Order>> allOrders = service.getAllOrders();
         view.displayOrders(allOrders);
     }
     
-    public void matchOrder(){
-        Trade matchedOrder = service.matchOrder();
-        view.displayTrade(matchedOrder);
+    public void matchOrder()throws OrderBookTradeException{
+        try{
+            Trade matchedOrder = service.matchOrder();
+            view.displayTrade(matchedOrder);
+        }catch(OrderBookTradeException e){
+            view.displayError(e.getMessage());
+        }
     }
 }
