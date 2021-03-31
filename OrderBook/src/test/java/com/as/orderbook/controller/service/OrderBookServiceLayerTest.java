@@ -5,7 +5,9 @@
  */
 package com.as.orderbook.controller.service;
 
+import com.as.orderbook.controller.dao.OrderBookOrderDao;
 import com.as.orderbook.controller.dao.OrderBookOrderDaoFileImpl;
+import com.as.orderbook.controller.dao.OrderBookTradeDao;
 import com.as.orderbook.controller.dao.OrderBookTradeDaoFileImpl;
 import com.as.orderbook.dto.BuyOrder;
 import com.as.orderbook.dto.Order;
@@ -24,7 +26,9 @@ import org.junit.jupiter.api.Test;
  * @author Jane
  */
 public class OrderBookServiceLayerTest { //Fairly minimal, as majority of methods in the service layer are just wrapping methods from the DAO
-    OrderBookServiceLayer service = new OrderBookServiceLayerImpl(new OrderBookOrderDaoFileImpl(), new OrderBookTradeDaoFileImpl());
+    OrderBookOrderDao orderDao = new OrderBookOrderDaoFileImpl();
+    OrderBookTradeDao tradeDao = new OrderBookTradeDaoFileImpl();
+    OrderBookServiceLayer service = new OrderBookServiceLayerImpl(orderDao, tradeDao);
     BuyOrder testBuyOrder1 = new BuyOrder(BigDecimal.ONE, 123);
     BuyOrder testBuyOrder2 = new BuyOrder(BigDecimal.TEN, 456);
     List<BuyOrder> buyOrderList = new ArrayList<>();
@@ -40,7 +44,6 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     
     @BeforeEach
     public void setUp() {
-        service.clearService();
         buyOrderList.clear();
         buyOrderList.add(testBuyOrder1);
         buyOrderList.add(testBuyOrder2);
@@ -54,6 +57,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
 
     @Test
     public void testIsSorted() { //Also tests getAllOrders
+        service.clearService();
         service.createOrders();
         Boolean isSorted = true;
         int i = 0;
@@ -80,6 +84,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     
     @Test
     public void testStats() {
+        service.clearService();
         service.createOrders();
         Boolean isValid = false;
         assertEquals(1000, service.getNumOfBuyOrders(), "Didn't create 1000 buy orders");
@@ -103,5 +108,22 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
             isValid = true;
         }
         assertTrue(isValid, "Average buy quantity is not valid");
+    }
+    
+    @Test
+    public void testMatchOrder() {
+        service.clearService();
+        service.createOrders();
+        Trade tradeMatch = service.matchOrder();
+        System.out.println("trade id: " + tradeMatch.getID());
+        assertTrue(tradeMatch.getID().matches("TRADE\\d+"), "Trade id doesn't match format");
+    }
+    
+    @Test
+    public void testMatchAllOrders() {
+        service.clearService();
+        service.createOrders();
+        service.matchAllOrders();
+        assertEquals(1000, service.getAllTrades().size(), "Not all trades were matched");
     }
 }

@@ -13,11 +13,7 @@ import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,8 +42,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //random
     Random rand = new Random();
-    
-    
+
     //method that creates 1000 buy and sell orders
     @Override
     public void createOrders(){
@@ -61,6 +56,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
             orderDao.addOrder(sellOrder.getID(), sellOrder);
         }
         orders = orderDao.getAllOrders();
+        System.out.println(orderDao.getAllOrders().size());
     }
     
     //add's order to map in dao
