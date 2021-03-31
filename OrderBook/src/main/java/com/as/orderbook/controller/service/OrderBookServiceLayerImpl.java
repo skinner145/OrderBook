@@ -15,8 +15,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  *
@@ -55,9 +53,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
             validateObject(buyOrder);
             validateObject(sellOrder);
             orderDao.addOrder(buyOrder.getID(), buyOrder);
-            System.out.println("adding buyOrder: " + buyOrder.getID());
+            buyOrders.add(buyOrder);
             orderDao.addOrder(sellOrder.getID(), sellOrder);
-            System.out.println("adding sellOrder: " + sellOrder.getID());
+            sellOrders.add(sellOrder);
         }
         
         orders = orderDao.getAllOrders();
@@ -66,18 +64,21 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //add's order to map in dao
     @Override
     public Order addOrder(String orderId, Order newOrder){
+        orders.add(newOrder);
         return orderDao.addOrder(orderId, newOrder);
     }
 
     //add's buy order to map in dao
     @Override
     public Order addBuyOrder(String orderId, Order order){
+        buyOrders.add(order);
         return orderDao.addOrder(orderId, order);
     }
     
     //add's sell order to map in dao
     @Override
     public Order addSellOrder(String orderId, Order order){
+        sellOrders.add(order);
         return orderDao.addOrder(orderId, order);
     }
     
@@ -91,7 +92,6 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     @Override
     public List<List<Order>> getAllOrders(){
         orders = orderDao.getAllOrders();
-        
         orders.forEach(order -> {
             //if order is a buy order add to buyOrders list
             if(order instanceof BuyOrder){
@@ -103,7 +103,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
             }
         });
         //list that will be returned
-        List<List<Order>> allOrders = new ArrayList<List<Order>>();
+        List<List<Order>> allOrders = new ArrayList<>();
         //sort lists
         buyOrders.sort((Order o1, Order o2) -> o2.getPrice().compareTo(o1.getPrice()));
         sellOrders.sort((Order o1, Order o2) -> o2.getPrice().compareTo(o1.getPrice()));
@@ -118,12 +118,14 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //remove Order by ID
     @Override
     public Order removeOrder(String orderId){
+        orders.remove(orderDao.getOrder(orderId));
         return orderDao.removeOrder(orderId);
     }
     
     //edit Order by ID
     @Override
     public Order editOrder(String orderId, Order editedOrder){
+        orders.set(orders.indexOf(orderDao.getOrder(orderId)), editedOrder);
         return orderDao.editOrder(orderId, editedOrder);
     }
     
@@ -175,6 +177,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //returns number of buy orders
     @Override
     public int getNumOfBuyOrders() {
+        buyOrders.forEach((i) -> {
+            System.out.println(i);
+        });
         return buyOrders.size();
     }
 
@@ -182,9 +187,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     @Override
     public int getSellQuantity() {
         int count = 0;
-        for(Order order : sellOrders){
-            count += order.getQuantity();
-        }
+        count = sellOrders.stream().map(order -> order.getQuantity()).reduce(count, Integer::sum);
         return count;
     }
 
@@ -192,9 +195,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     @Override
     public int getBuyQuantity() {
         int count = 0;
-        for(Order order : buyOrders){
-            count += order.getQuantity();
-        }
+        count = buyOrders.stream().map(order -> order.getQuantity()).reduce(count, Integer::sum);
         return count;
     }
 
@@ -202,9 +203,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     @Override
     public BigDecimal getAverageSellPrice() {
         BigDecimal price = new BigDecimal("0");
-        for(Order order : sellOrders){
+        sellOrders.forEach(order -> {
             price.add(order.getPrice());
-        }
+        });
         return price.divide(new BigDecimal(getNumOfSellOrders()));
     }
 
@@ -212,9 +213,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     @Override
     public BigDecimal getAverageBuyPrice() {
         BigDecimal price = new BigDecimal("0");
-        for(Order order : buyOrders){
+        buyOrders.forEach(order -> {
             price.add(order.getPrice());
-        }
+        });
         return price.divide(new BigDecimal(getNumOfBuyOrders()));
     }
     
@@ -242,12 +243,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //if buy orders or sell orders = 0 or less - order book is empty
     @Override
     public boolean checkIfEmpty(){
-        if(buyOrders.size() > 0 && sellOrders.size() > 0){
-            return false;
-        }
-        else{
-            return true;
-        }
+        System.out.println("buy orders left: " + buyOrders.size());
+        System.out.println("sell orders left: " + sellOrders.size());
+        return (buyOrders.size() < 0 && sellOrders.size() < 0);
     }
     
     //matches sell order with buy order
@@ -273,7 +271,10 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         validateObject(trade);
         //add trade object in dao
         tradeDao.addTrade(trade.getID(), trade);
+<<<<<<< HEAD
         System.out.println(trade.getExecutionTime() + " TIME ");
+=======
+>>>>>>> d37fcbdcae01ed91adbfe2d6b19e8f49fcda09f7
         return trade;
     }
     
@@ -289,18 +290,18 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //method to update orders in dao
     public void updateAfterMatch(Order buy, Order sell){
-        //if buy order quaantity = 0
+        //if buy order quantity = 0
         if(buy.getQuantity() == 0){
             //remove buy order from dao list
-            orderDao.removeOrder(buy.getID());
+            removeOrder(buy.getID());
             //update sell order in list
-            orderDao.editOrder(sell.getID(), sell);
+            editOrder(sell.getID(), sell);
         }
         else{
             //remove sell order from dao list
-            orderDao.removeOrder(sell.getID());
+            removeOrder(sell.getID());
             //update buy order in list
-            orderDao.editOrder(buy.getID(), buy);
+            editOrder(buy.getID(), buy);
         }
     }
     

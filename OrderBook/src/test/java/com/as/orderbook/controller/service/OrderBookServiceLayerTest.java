@@ -87,14 +87,16 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         service.clearService();
         service.createOrders(10);
         Boolean isValid = false;
-        assertEquals(10, service.getNumOfBuyOrders(), "Didn't create 10 buy orders");
-        assertEquals(10, service.getNumOfSellOrders(), "Didn't create 10 sell orders");
-        if (service.getSellQuantity() >= 200 && service.getSellQuantity() <= 500) { //Checking if the sell quantity is within a valid range
+        int buySize = service.getAllOrders().get(0).size();
+        int sellSize = service.getAllOrders().get(1).size();
+        assertEquals(buySize, service.getNumOfBuyOrders(), "Didn't create 10 buy orders");
+        assertEquals(sellSize, service.getNumOfSellOrders(), "Didn't create 10 sell orders");
+        if (service.getSellQuantity() >= sellSize * 20 && service.getSellQuantity() <= sellSize * 50) { //Checking if the sell quantity is within a valid range
             isValid = true;
         }
         assertTrue(isValid, "Sell quantity is not valid");
         isValid = false;
-        if (service.getBuyQuantity() >= 200 && service.getBuyQuantity() <= 500) { //Checking if the sell quantity is within a valid range
+        if (service.getBuyQuantity() >= buySize * 20 && service.getBuyQuantity() <= buySize * 20) { //Checking if the sell quantity is within a valid range
             isValid = true;
         }
         assertTrue(isValid, "Buy quantity is not valid");
@@ -102,12 +104,12 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         if (service.getAverageSellPrice().compareTo(new BigDecimal(20)) > -1 && service.getAverageSellPrice().compareTo(new BigDecimal(50)) < 1) { //Checking if the average sell price is within a valid range
             isValid = true;
         }
-        assertTrue(isValid, "Average sell quantity is not valid");
+        assertTrue(isValid, "Average sell price is not valid");
         isValid = false;
-        if (service.getAverageBuyPrice().compareTo(new BigDecimal(20)) > -1 && service.getAverageBuyPrice().compareTo(new BigDecimal(50)) < 1) { //Checking if the average buy price is within a valid range
+        if (service.getAverageBuyPrice().compareTo(new BigDecimal(190)) > -1 && service.getAverageBuyPrice().compareTo(new BigDecimal(191)) < 1) { //Checking if the average buy price is within a valid range
             isValid = true;
         }
-        assertTrue(isValid, "Average buy quantity is not valid");
+        assertTrue(isValid, "Average buy price is not valid");
     }
     
     @Test
