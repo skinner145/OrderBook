@@ -14,6 +14,7 @@ import com.as.orderbook.controller.service.OrderBookOrderException;
 import com.as.orderbook.controller.service.OrderBookOrderIDException;
 import com.as.orderbook.controller.service.OrderBookServiceLayer;
 import com.as.orderbook.controller.service.OrderBookServiceLayerImpl;
+import com.as.orderbook.controller.service.OrderBookTradeException;
 import com.as.orderbook.controller.view.OrderBookView;
 import com.as.orderbook.controller.view.UserIO;
 import com.as.orderbook.controller.view.UserIOConsoleImpl;
@@ -23,7 +24,7 @@ import com.as.orderbook.controller.view.UserIOConsoleImpl;
  * @author Skininho
  */
 public class App {
-    public static void main(String[] args) throws OrderBookOrderIDException, OrderBookOrderException {
+    public static void main(String[] args) throws OrderBookOrderIDException, OrderBookOrderException, OrderBookTradeException {
         
          UserIO myIo = new UserIOConsoleImpl();
         

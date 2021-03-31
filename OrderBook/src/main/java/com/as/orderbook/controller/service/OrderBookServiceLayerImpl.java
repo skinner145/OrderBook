@@ -52,8 +52,8 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
                     getRandomNum(20, 50));
             Order sellOrder = new SellOrder(new BigDecimal(getRandomNum(190)),
                     getRandomNum(20, 50));
-            validateOrder(buyOrder);
-            validateOrder(sellOrder);
+            validateObject(buyOrder);
+            validateObject(sellOrder);
             orderDao.addOrder(buyOrder.getID(), buyOrder);
             System.out.println("adding buyOrder: " + buyOrder.getID());
             orderDao.addOrder(sellOrder.getID(), sellOrder);
@@ -252,7 +252,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //matches sell order with buy order
     @Override
-    public Trade matchOrder(){
+    public Trade matchOrder() throws OrderBookTradeException{
         //gets up-to-date list
         getAllOrders();
         //gets the buy and sell order with the highest price
@@ -270,6 +270,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         updateAfterMatch(buy, sell);
         //create trade object
         Trade trade = new Trade(buy, sell, price);
+        validateObject(trade);
         //add trade object in dao
         tradeDao.addTrade(trade.getID(), trade);
         System.out.println(trade.getID());
@@ -278,7 +279,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //method to match all orders
     @Override
-    public void matchAllOrders(){
+    public void matchAllOrders() throws OrderBookTradeException{
         //while buy and sell orders list is not empty
         while(!checkIfEmpty()){
             //match order method
@@ -312,7 +313,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         }
     }
     
-    public void validateOrder(Order order) throws OrderBookOrderIDException, OrderBookOrderException{
+    public void validateObject(Order order) throws OrderBookOrderIDException, OrderBookOrderException{
         if(order.getID().isBlank()){
             throw new OrderBookOrderIDException("Order ID cannot be blank");
         }
@@ -321,6 +322,11 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         }
         if(order.getQuantity() <= 0){
             throw new OrderBookOrderException("Order quantity must be greater than zero");
+        }
+    }
+    public void validateObject(Trade trade) throws OrderBookTradeException{
+        if(trade.getID().isBlank()){
+            throw new OrderBookTradeException("Trade ID cannot be blank");
         }
     }
 }

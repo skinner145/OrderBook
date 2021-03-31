@@ -62,7 +62,7 @@ public interface OrderBookServiceLayer {
     //check if orderbook is empty
     boolean checkIfEmpty();
     //match order
-    Trade matchOrder();
+    Trade matchOrder() throws OrderBookTradeException;
     //match all orders
-    void matchAllOrders();
+    void matchAllOrders()throws OrderBookTradeException;
 }
