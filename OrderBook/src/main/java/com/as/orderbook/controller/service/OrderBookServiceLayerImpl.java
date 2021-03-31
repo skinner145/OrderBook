@@ -25,13 +25,16 @@ import java.util.Random;
  * @author Skininho
  */
 public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
+    //member fields for dao
     private OrderBookOrderDao orderDao;
     private OrderBookTradeDao tradeDao;
     
+    //list for orders
     List<Order> orders = orderDao.getAllOrders();
     List<Order> buyOrders = new ArrayList<>();
     List<Order> sellOrders = new ArrayList<>();
     
+    //random
     Random rand = new Random();
     //constructor
     public OrderBookServiceLayerImpl(OrderBookOrderDao orderDao, OrderBookTradeDao tradeDao){
@@ -39,6 +42,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         this.tradeDao = tradeDao;
     }
     
+    //method that creates 1000 buy and sell orders
     @Override
     public void createOrders(){
         for(int i = 0; i < 1000; i++){
@@ -51,99 +55,122 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         }
     }
     
+    //add's order to map in dao
     @Override
     public Order addOrder(String orderId, Order newOrder){
         return orderDao.addOrder(orderId, newOrder);
     }
 
+    //add's buy order to map in dao
     @Override
     public Order addBuyOrder(String orderId, Order order){
         return orderDao.addOrder(orderId, order);
     }
     
+    //add's sell order to map in dao
     @Override
     public Order addSellOrder(String orderId, Order order){
         return orderDao.addOrder(orderId, order);
     }
     
+    //get order by ID
     @Override
     public Order getOrder(String orderId){
         return orderDao.getOrder(orderId);
     }
     
+    //returns a list of lists - one for buy orders - one for sell orders
     @Override
     public List<List<Order>> getAllOrders(){
         clearService();
         
         orders.forEach(order -> {
+            //if order is a buy order add to buyOrders list
             if(order instanceof BuyOrder){
                 buyOrders.add(order);
             }
+            //else add it to sellOrders list
             else{
                 sellOrders.add(order);
             }
         });
+        //list that will be returned
         List<List<Order>> allOrders = new ArrayList<List<Order>>();
-        
+        //sort lists
         buyOrders.sort((Order o1, Order o2) -> o1.getPrice().compareTo(o2.getPrice()));
         sellOrders.sort((Order o1, Order o2) -> o1.getPrice().compareTo(o2.getPrice()));
+        //add each list to allOrders list
         allOrders.add(buyOrders);
         allOrders.add(sellOrders);
+        
+        //return list
         return allOrders;
     }
     
+    //remove Order by ID
     @Override
     public Order removeOrder(String orderId){
         return orderDao.removeOrder(orderId);
     }
-
+    
+    //edit Order by ID
     @Override
     public Order editOrder(String orderId, Order editedOrder){
         return orderDao.editOrder(orderId, editedOrder);
     }
     
+    //add Trade to map in dao
     @Override
     public Trade addTrade(String tradeId, Trade trade){
         return tradeDao.addTrade(tradeId, trade);
     }
     
+    //get Trade by ID
     @Override
     public Trade getTrade(String tradeId){
         return tradeDao.getTrade(tradeId);
     }
     
+    //returns list of all Trades
     @Override
     public List<Trade> getAllTrades(){
         return tradeDao.getAllTrades();
     }
     
+    //remove Trade by ID
     @Override
     public Trade removeTrade(String tradeId){
         return tradeDao.removeTrade(tradeId);
     }
     
+    //edit Trade by ID
     @Override
     public Trade editTrade(String tradeId, Trade editedTrade){
         return tradeDao.editTrade(tradeId, editedTrade);
     }
-    
+    //gets int within range (inclusive)
     public int getRandomNum(int min, int max){
         return rand.nextInt((max+1) - min ) + min;
     }
+    
+    //gets double between min - (min + 1)
     public double getRandomNum(int min){
         return rand.nextDouble() + min;
     }
 
+    //returns number of sell orders
     @Override
     public int getNumOfSellOrders() {
         return sellOrders.size();
     }
 
+    //returns number of buy orders
     @Override
     public int getNumOfBuyOrders() {
         return buyOrders.size();
     }
 
+    //adds quantity of all sell orders together and returns them
     @Override
     public int getSellQuantity() {
         int count = 0;
@@ -153,6 +180,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         return count;
     }
 
+    //adds quantity of all buy orders together and returns them
     @Override
     public int getBuyQuantity() {
         int count = 0;
@@ -162,6 +190,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         return count;
     }
 
+    //adds all sell prices together then divide by number of sell orders
     @Override
     public BigDecimal getAverageSellPrice() {
         BigDecimal price = new BigDecimal("0");
@@ -171,6 +200,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         return price.divide(new BigDecimal(getNumOfSellOrders()));
     }
 
+    //adds all buy prices together then divide by number of buy orders
     @Override
     public BigDecimal getAverageBuyPrice() {
         BigDecimal price = new BigDecimal("0");
@@ -180,6 +210,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         return price.divide(new BigDecimal(getNumOfBuyOrders()));
     }
     
+    //returns String of previous 6 method returns
     @Override
     public String displayStats(){
         return "Number of Sell Orders: " + getNumOfSellOrders() + 
@@ -190,6 +221,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
                 " - Average Buy Price: " + getAverageBuyPrice();
     }
     
+    //clears lists in service layer
     @Override
     public void clearService(){
         orders.clear();
@@ -197,6 +229,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         sellOrders.clear();
     }
     
+    //if buy orders or sell orders = 0 or less - order book is empty
     @Override
     public boolean checkIfEmpty(){
         if(buyOrders.size() > 0 && sellOrders.size() > 0){
@@ -207,38 +240,60 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         }
     }
     
+    //matches sell order with buy order
     @Override
     public Trade matchOrder(){
+        //gets up-to-date list
         getAllOrders();
+        //gets the buy and sell order with the highest price
         Order buy = buyOrders.get(0);
         Order sell = sellOrders.get(0);
+        //gets the smallest quantity of the two orders
         int quantity = getSmallest(buy.getQuantity(), sell.getQuantity());
+        //execution price will be sell orders price
         BigDecimal price = sell.getPrice();
+        
+        //subtract quantity from sell and buy order
         buy.setQuantity(buy.getQuantity() - quantity);
         sell.setQuantity(sell.getQuantity() - quantity);
+        
+        //update map after trade
         updateAfterMatch(buy, sell);
+        
+        //create trade object
         Trade trade = new Trade(buy, sell, price);
+        //add trade object in dao
         return tradeDao.addTrade(trade.getID(), trade);
     }
     
+    //method to match all orders
     @Override
     public void matchAllOrders(){
+        //while buy and sell orders list is not empty
         while(!checkIfEmpty()){
+            //match order method
             matchOrder();
         }
     }
     
+    //method to update orders in dao
     public void updateAfterMatch(Order buy, Order sell){
+        //if buy order quaantity = 0
         if(buy.getQuantity() == 0){
+            //remove buy order from dao list
             orderDao.removeOrder(buy.getID());
+            //update sell order in list
             orderDao.editOrder(sell.getID(), sell);
         }
         else{
+            //remove sell order from dao list
             orderDao.removeOrder(sell.getID());
+            //update buy order in list
             orderDao.editOrder(buy.getID(), buy);
         }
     }
     
+    //method to return the smallest of two ints
     public int getSmallest(int a, int b){
         if(a > b){
             return b;
