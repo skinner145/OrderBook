@@ -5,16 +5,22 @@
  */
 package com.as.orderbook.controller.dao;
 
+import com.as.orderbook.dto.BuyOrder;
 import com.as.orderbook.dto.Order;
+import com.as.orderbook.dto.SellOrder;
+import java.math.BigDecimal;
 import java.util.*;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Skininho
  */
+
 public class OrderBookOrderDaoFileImpl implements OrderBookOrderDao{
     //map to store all orders in 
     Map<String, Order>orders = new HashMap<>();
+    Order buyOrder = new BuyOrder(new BigDecimal("190"),10);
     
     //method that adds order and ID to hashmap
     @Override

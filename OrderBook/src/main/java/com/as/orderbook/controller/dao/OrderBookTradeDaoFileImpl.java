@@ -7,11 +7,13 @@ package com.as.orderbook.controller.dao;
 
 import com.as.orderbook.dto.Trade;
 import java.util.*;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Skininho
  */
+
 public class OrderBookTradeDaoFileImpl implements OrderBookTradeDao{
     //map for trades
     Map<String, Trade>trades = new HashMap<>();

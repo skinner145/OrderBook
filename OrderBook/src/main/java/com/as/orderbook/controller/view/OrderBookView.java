@@ -5,13 +5,25 @@
  */
 package com.as.orderbook.controller.view;
 
+import com.as.orderbook.dto.Order;
+import java.util.List;
 import java.util.Scanner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Skininho
  */
+
 public class OrderBookView {
+    private UserIO io;
+    
+    
+    public OrderBookView(UserIO io){
+        this.io = io;
+    }
+    
     public Integer printMenuAndGetSelection() {
         Scanner inputReader = new Scanner(System.in);
         Boolean correctInput = false;
@@ -45,5 +57,13 @@ public class OrderBookView {
             }
         }
         return input;
+    }
+    
+    public void displayOrders(List<List<Order>> allOrders){
+        
+        List<Order> orders1 = allOrders.get(0);
+        List<Order> orders2 = allOrders.get(1);
+        io.print(orders1.get(0).getID());
+        io.printOrderList(orders1, orders2);
     }
 }

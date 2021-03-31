@@ -19,33 +19,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Skininho
  */
+
 public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //member fields for dao
     private OrderBookOrderDao orderDao;
     private OrderBookTradeDao tradeDao;
     
+    //constructor
+
+    public OrderBookServiceLayerImpl(OrderBookOrderDao orderDao, OrderBookTradeDao tradeDao) {
+        this.orderDao = orderDao;
+        this.tradeDao = tradeDao;
+    }
+    
     //list for orders
-    List<Order> orders = orderDao.getAllOrders();
+    List<Order> orders = new ArrayList<>();
     List<Order> buyOrders = new ArrayList<>();
     List<Order> sellOrders = new ArrayList<>();
     
     //random
     Random rand = new Random();
-    //constructor
-    public OrderBookServiceLayerImpl(OrderBookOrderDao orderDao, OrderBookTradeDao tradeDao){
-        this.orderDao = orderDao;
-        this.tradeDao = tradeDao;
-    }
+    
     
     //method that creates 1000 buy and sell orders
     @Override
     public void createOrders(){
-        for(int i = 0; i < 1000; i++){
+        for(int i = 0; i < 10; i++){
+            
             Order buyOrder = new BuyOrder(new BigDecimal(getRandomNum(190)),
                     getRandomNum(20, 50));
             Order sellOrder = new SellOrder(new BigDecimal(getRandomNum(190)),
@@ -53,6 +60,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
             orderDao.addOrder(buyOrder.getID(), buyOrder);
             orderDao.addOrder(sellOrder.getID(), sellOrder);
         }
+        orders = orderDao.getAllOrders();
     }
     
     //add's order to map in dao
@@ -82,8 +90,6 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //returns a list of lists - one for buy orders - one for sell orders
     @Override
     public List<List<Order>> getAllOrders(){
-        clearService();
-        
         orders.forEach(order -> {
             //if order is a buy order add to buyOrders list
             if(order instanceof BuyOrder){
