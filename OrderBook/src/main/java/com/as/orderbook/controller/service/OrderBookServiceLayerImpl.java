@@ -45,18 +45,23 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
 
     //method that creates 1000 buy and sell orders
     @Override
-    public void createOrders(){
-        for(int i = 0; i < 10; i++){
+    public void createOrders(int orderNum){
+        clearService();
+        for(int i = 0; i < orderNum; i++){
             Order buyOrder = new BuyOrder(new BigDecimal(getRandomNum(190)),
                     getRandomNum(20, 50));
             Order sellOrder = new SellOrder(new BigDecimal(getRandomNum(190)),
                     getRandomNum(20, 50));
             orderDao.addOrder(buyOrder.getID(), buyOrder);
+            System.out.println("adding buyOrder: " + buyOrder.getID());
             orderDao.addOrder(sellOrder.getID(), sellOrder);
+            System.out.println("adding sellOrder: " + sellOrder.getID());
         }
         String s= "    ";
         System.out.println(s.length());
         orders = orderDao.getAllOrders();
+        
+        System.out.println(orders.size());
     }
     
     //add's order to map in dao
@@ -86,7 +91,6 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //returns a list of lists - one for buy orders - one for sell orders
     @Override
     public List<List<Order>> getAllOrders(){
-        clearService();
         orders = orderDao.getAllOrders();
         
         orders.forEach(order -> {
@@ -232,6 +236,8 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         orders.clear();
         buyOrders.clear();
         sellOrders.clear();
+        orderDao.clearDao();
+        tradeDao.clearDao();
     }
     
     //if buy orders or sell orders = 0 or less - order book is empty
@@ -267,6 +273,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         Trade trade = new Trade(buy, sell, price);
         //add trade object in dao
         tradeDao.addTrade(trade.getID(), trade);
+        System.out.println(trade.getID());
         return trade;
     }
     

@@ -31,7 +31,7 @@ public class OrderBookController {
     public void run() {
         int input = 0;
         Boolean keepRunning = true;
-        createOrders();
+        createOrders(1000);
         while (keepRunning) {
             input = view.printMenuAndGetSelection();
             switch (input) {
@@ -70,8 +70,8 @@ public class OrderBookController {
             }
         }
     }
-    public void createOrders(){
-        service.createOrders();
+    public void createOrders(int orderNum){
+        service.createOrders(orderNum);
     }
     public void viewOrders(){
         List<List<Order>> allOrders = service.getAllOrders();
