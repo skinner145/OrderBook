@@ -15,8 +15,7 @@ import java.util.*;
 public class OrderBookOrderDaoFileImpl implements OrderBookOrderDao{
     Map<String, Order>orders = new HashMap<>();
     @Override
-    public Order addOrder(String orderId, Order newOrder){ //Temporarily modifying for testing purposes
-        System.out.println("Adding " + orderId + ": " + newOrder);
+    public Order addOrder(String orderId, Order newOrder){
         orders.put(orderId, newOrder);
         return newOrder;
     }
