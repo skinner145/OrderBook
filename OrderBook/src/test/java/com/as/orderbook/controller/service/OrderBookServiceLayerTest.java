@@ -64,7 +64,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         List<Order> buyOrderList = service.getAllOrders().get(0);
         List<Order> sellOrderList = service.getAllOrders().get(1);
         
-        for (i = 1; i < 1000; i++) {
+        for (i = 1; i < buyOrderList.size(); i++) {
             if (buyOrderList.get(i).getPrice().compareTo(buyOrderList.get(i - 1).getPrice()) == -1) {
                 isSorted = false;
                 break;
@@ -73,7 +73,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         assertTrue(isSorted, "Buy orders aren't sorted");
         isSorted = true;
         
-        for (i = 1; i < 1000; i++) {
+        for (i = 1; i < sellOrderList.size(); i++) {
             if (sellOrderList.get(i).getPrice().compareTo(sellOrderList.get(i - 1).getPrice()) == -1) {
                 isSorted = false;
                 break;
@@ -87,14 +87,14 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         service.clearService();
         service.createOrders();
         Boolean isValid = false;
-        assertEquals(1000, service.getNumOfBuyOrders(), "Didn't create 1000 buy orders");
-        assertEquals(1000, service.getNumOfSellOrders(), "Didn't create 1000 sell orders");
-        if (service.getSellQuantity() >= 20000 && service.getSellQuantity() <= 50000) { //Checking if the sell quantity is within a valid range
+        assertEquals(10, service.getNumOfBuyOrders(), "Didn't create 10 buy orders");
+        assertEquals(10, service.getNumOfSellOrders(), "Didn't create 10 sell orders");
+        if (service.getSellQuantity() >= 200 && service.getSellQuantity() <= 500) { //Checking if the sell quantity is within a valid range
             isValid = true;
         }
         assertTrue(isValid, "Sell quantity is not valid");
         isValid = false;
-        if (service.getBuyQuantity() >= 20000 && service.getBuyQuantity() <= 50000) { //Checking if the sell quantity is within a valid range
+        if (service.getBuyQuantity() >= 200 && service.getBuyQuantity() <= 500) { //Checking if the sell quantity is within a valid range
             isValid = true;
         }
         assertTrue(isValid, "Buy quantity is not valid");
@@ -116,7 +116,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         service.createOrders();
         Trade tradeMatch = service.matchOrder();
         System.out.println("trade id: " + tradeMatch.getID());
-        assertTrue(tradeMatch.getID().matches("TRADE\\d+"), "Trade id doesn't match format");
+        assertTrue(tradeMatch.getID().matches("TRADE\\d+.*"), "Trade id doesn't match format");
     }
     
     @Test
@@ -124,6 +124,6 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         service.clearService();
         service.createOrders();
         service.matchAllOrders();
-        assertEquals(1000, service.getAllTrades().size(), "Not all trades were matched");
+        assertEquals(10, service.getAllTrades().size(), "Not all trades were matched");
     }
 }
