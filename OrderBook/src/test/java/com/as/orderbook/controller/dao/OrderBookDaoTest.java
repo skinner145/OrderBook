@@ -7,7 +7,6 @@ package com.as.orderbook.controller.dao;
 
 import com.as.orderbook.dto.BuyOrder;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
 import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
@@ -31,12 +30,25 @@ public class OrderBookDaoTest {
     Trade testTrade1 = new Trade(testBuyOrder1, testSellOrder1, BigDecimal.ONE);
     Trade testTrade2 = new Trade(testBuyOrder2, testSellOrder2, new BigDecimal("9.9"));
     List<Trade> tradeList = new ArrayList<>();
+    Boolean isCorrect = true;
     
     public OrderBookDaoTest() {
     }
+
+    @Test
+    public void testAdd() {
+        orderDao.clearDao();
+        tradeDao.clearDao();
+        orderDao.addOrder(testBuyOrder1.getID(), testBuyOrder1);
+        orderDao.addOrder(testSellOrder1.getID(), testSellOrder1);
+        tradeDao.addTrade(testTrade1.getID(), testTrade1);
+        assertEquals(testBuyOrder1, orderDao.getOrder(testBuyOrder1.getID()), "Added buy order was not equal");
+        assertEquals(testSellOrder1, orderDao.getOrder(testSellOrder1.getID()), "Added sell order was not equal");
+        assertEquals(testTrade1, tradeDao.getTrade(testTrade1.getID()), "Added trade was not equal");
+    }
     
-    @BeforeEach
-    public void setUp() { //returns the test dao to a blank state before each test
+    @Test
+    public void testGetAll() {
         orderDao.clearDao();
         tradeDao.clearDao();
         buyOrderList.clear();
@@ -48,36 +60,55 @@ public class OrderBookDaoTest {
         tradeList.clear();
         tradeList.add(testTrade1);
         tradeList.add(testTrade2);
-    }
-
-    @Test
-    public void testAdd() {
-        orderDao.addOrder(testBuyOrder1.getID(), testBuyOrder1);
-        orderDao.addOrder(testSellOrder1.getID(), testSellOrder1);
-        tradeDao.addTrade(testTrade1.getID(), testTrade1);
-        assertEquals(testBuyOrder1, orderDao.getOrder(testBuyOrder1.getID()), "Added buy order was not equal");
-        assertEquals(testSellOrder1, orderDao.getOrder(testSellOrder1.getID()), "Added sell order was not equal");
-        assertEquals(testTrade1, tradeDao.getTrade(testTrade1.getID()), "Added trade was not equal");
-    }
-    
-    @Test
-    public void testGetAll() {
+        
         orderDao.addOrder(testBuyOrder1.getID(), testBuyOrder1);
         orderDao.addOrder(testBuyOrder2.getID(), testBuyOrder2);
-        assertEquals(buyOrderList, orderDao.getAllOrders(), "Added buy orders were either incorrect or in the wrong order");
+        orderDao.getAllOrders().forEach((i) -> {
+            if (!buyOrderList.contains(i)) {
+                isCorrect = false;
+            }
+        });
+        if (buyOrderList.size() != orderDao.getAllOrders().size()) {
+            isCorrect = false;
+        }
+        assertTrue(isCorrect, "Added buy orders were incorrect");
         orderDao.clearDao();
+        isCorrect = true;
         
         orderDao.addOrder(testSellOrder1.getID(), testSellOrder1);
         orderDao.addOrder(testSellOrder2.getID(), testSellOrder2);
-        assertEquals(sellOrderList, orderDao.getAllOrders(), "Added sell orders were either incorrect or in the wrong order");
+        orderDao.getAllOrders().forEach((i) -> {
+            if (!sellOrderList.contains(i)) {
+                isCorrect = false;
+                System.out.println("sellOrderList does not contain " + i);
+            }
+        });
+        if (sellOrderList.size() != orderDao.getAllOrders().size()) {
+            isCorrect = false;
+            System.out.println("orderDao is wrong size(" + orderDao.getAllOrders().size() + ", should be " + sellOrderList.size() + ")");
+        }
+        assertTrue(isCorrect, "Added sell orders were incorrect");
+        isCorrect = true;
         
         tradeDao.addTrade(testTrade1.getID(), testTrade1);
         tradeDao.addTrade(testTrade2.getID(), testTrade2);
-        assertEquals(tradeList, tradeDao.getAllTrades(), "Added trades were either incorrect or in the wrong order");
+        tradeDao.getAllTrades().forEach((i) -> {
+            if (!tradeList.contains(i)) {
+                isCorrect = false;
+                System.out.println("tradeList does not contain " + i);
+            }
+        });
+        if (tradeList.size() != tradeDao.getAllTrades().size()) {
+            isCorrect = false;
+            System.out.println("tradeDao is wrong size");
+        }
+        assertTrue(isCorrect, "Added trades were incorrect");
     }
     
     @Test
     public void testRemove() { //Will automatically pass if add test fails, keep this in mind
+        orderDao.clearDao();
+        tradeDao.clearDao();
         orderDao.addOrder(testBuyOrder1.getID(), testBuyOrder1);
         orderDao.removeOrder(testBuyOrder1.getID());
         assertTrue(orderDao.getAllOrders().isEmpty(), "Buy order was not successfully removed");
@@ -93,6 +124,8 @@ public class OrderBookDaoTest {
     
     @Test
     public void testEdit() {
+        orderDao.clearDao();
+        tradeDao.clearDao();
         orderDao.addOrder(testBuyOrder1.getID(), testBuyOrder1);
         orderDao.editOrder(testBuyOrder1.getID(), testBuyOrder2);
         assertEquals(testBuyOrder2, orderDao.getOrder(testBuyOrder1.getID()), "Buy order was not successfully updated");

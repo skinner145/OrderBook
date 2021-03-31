@@ -6,7 +6,6 @@
 package com.as.orderbook.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  *
@@ -14,6 +13,6 @@ import java.time.LocalDateTime;
  */
 public class BuyOrder extends Order{
     public BuyOrder(BigDecimal price, Integer quantity) {
-        super("BUY" + LocalDateTime.now().toString(), price, quantity);
+        super("BUY" + System.nanoTime(), price, quantity);
     }
 }
