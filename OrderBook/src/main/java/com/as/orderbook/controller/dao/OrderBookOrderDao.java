@@ -13,10 +13,16 @@ import java.util.List;
  * @author Skininho
  */
 public interface OrderBookOrderDao {
+    //add order
     Order addOrder(String orderId, Order order);
+    //get order by ID
     Order getOrder(String orderId);
+    //get list of all orders
     List<Order> getAllOrders();
+    //remove order by ID
     Order removeOrder(String orderId);
+    //edit oreder by ID
     Order editOrder(String orderId, Order editedOrder);
+    //clear dao lists/maps
     void clearDao();
 }

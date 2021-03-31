@@ -13,33 +13,41 @@ import java.util.*;
  * @author Skininho
  */
 public class OrderBookOrderDaoFileImpl implements OrderBookOrderDao{
+    //map to store all orders in 
     Map<String, Order>orders = new HashMap<>();
+    
+    //method that adds order and ID to hashmap
     @Override
     public Order addOrder(String orderId, Order newOrder){
         orders.put(orderId, newOrder);
         return newOrder;
     }
 
+    //gets order with matching ID from hashmap
     @Override
     public Order getOrder(String orderId){
         return orders.get(orderId);
     }
     
+    //returns list of all orders from orders hashmap
     @Override
     public List<Order> getAllOrders(){
         return new ArrayList<>(orders.values());
     }
     
+    //removes order using orderID
     @Override
     public Order removeOrder(String orderId){
         return orders.remove(orderId);
     }
 
+    //replaces the order with matching orderID with editedOrder object
     @Override
     public Order editOrder(String orderId, Order editedOrder){
         return orders.replace(orderId, editedOrder);
     }
 
+    //clears map
     @Override
     public void clearDao() {
         orders.clear();
