@@ -17,8 +17,8 @@ import java.util.List;
  * @author Skininho
  */
 public interface OrderBookServiceLayer {
-    //method for creating 1000 buy and sell orders
-    void createOrders();
+    //method for creating buy and sell orders
+    void createOrders(int orderNum);
     //add order
     Order addOrder(String orderId, Order order);
     //add buy order

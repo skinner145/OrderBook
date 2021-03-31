@@ -58,14 +58,14 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     @Test
     public void testIsSorted() { //Also tests getAllOrders
         service.clearService();
-        service.createOrders();
+        service.createOrders(10);
         Boolean isSorted = true;
         int i = 0;
         List<Order> buyOrderList = service.getAllOrders().get(0);
         List<Order> sellOrderList = service.getAllOrders().get(1);
         
         for (i = 1; i < buyOrderList.size(); i++) {
-            if (buyOrderList.get(i).getPrice().compareTo(buyOrderList.get(i - 1).getPrice()) == -1) {
+            if (buyOrderList.get(i).getPrice().compareTo(buyOrderList.get(i - 1).getPrice()) == 1) {
                 isSorted = false;
                 break;
             }
@@ -74,7 +74,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         isSorted = true;
         
         for (i = 1; i < sellOrderList.size(); i++) {
-            if (sellOrderList.get(i).getPrice().compareTo(sellOrderList.get(i - 1).getPrice()) == -1) {
+            if (sellOrderList.get(i).getPrice().compareTo(sellOrderList.get(i - 1).getPrice()) == 1) {
                 isSorted = false;
                 break;
             }
@@ -85,7 +85,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     @Test
     public void testStats() {
         service.clearService();
-        service.createOrders();
+        service.createOrders(10);
         Boolean isValid = false;
         assertEquals(10, service.getNumOfBuyOrders(), "Didn't create 10 buy orders");
         assertEquals(10, service.getNumOfSellOrders(), "Didn't create 10 sell orders");
@@ -113,7 +113,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     @Test
     public void testMatchOrder() {
         service.clearService();
-        service.createOrders();
+        service.createOrders(10);
         Trade tradeMatch = service.matchOrder();
         System.out.println("trade id: " + tradeMatch.getID());
         assertTrue(tradeMatch.getID().matches("TRADE\\d+.*"), "Trade id doesn't match format");
@@ -122,7 +122,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     @Test
     public void testMatchAllOrders() {
         service.clearService();
-        service.createOrders();
+        service.createOrders(10);
         service.matchAllOrders();
         assertEquals(10, service.getAllTrades().size(), "Not all trades were matched");
     }
