@@ -27,7 +27,19 @@ public class UserIOConsoleImpl implements UserIO{
         print(orders1.size() + "   " + orders2.size());
         int length = Math.max(orders1.size(), orders2.size());
         for(int i = 0; i < length; i++){
-            print(orders1.get(i).getID() + " --- " + orders2.get(i).getID());
+            String output = "";
+            try{
+                output = orders1.get(i).getID();
+            }catch(IndexOutOfBoundsException e){
+                output = "                  ";
+            }
+            output = output.concat(" --- ");
+            try{
+                output = output.concat(orders2.get(i).getID());
+            }
+            catch(IndexOutOfBoundsException e){
+            }
+            print(output);
         }
     }
 
