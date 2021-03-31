@@ -45,23 +45,22 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
 
     //method that creates 1000 buy and sell orders
     @Override
-    public void createOrders(int orderNum){
+    public void createOrders(int orderNum) throws OrderBookOrderIDException{
         clearService();
         for(int i = 0; i < orderNum; i++){
             Order buyOrder = new BuyOrder(new BigDecimal(getRandomNum(190)),
                     getRandomNum(20, 50));
             Order sellOrder = new SellOrder(new BigDecimal(getRandomNum(190)),
                     getRandomNum(20, 50));
+            validateOrder(buyOrder);
+            validateOrder(sellOrder);
             orderDao.addOrder(buyOrder.getID(), buyOrder);
             System.out.println("adding buyOrder: " + buyOrder.getID());
             orderDao.addOrder(sellOrder.getID(), sellOrder);
             System.out.println("adding sellOrder: " + sellOrder.getID());
         }
-        String s= "    ";
-        System.out.println(s.length());
-        orders = orderDao.getAllOrders();
         
-        System.out.println(orders.size());
+        orders = orderDao.getAllOrders();
     }
     
     //add's order to map in dao
@@ -310,6 +309,18 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
             return b;
         }else{
             return a;
+        }
+    }
+    
+    public void validateOrder(Order order) throws OrderBookOrderIDException{
+        if(order.getID().isBlank()){
+            throw new OrderBookOrderIDException("Order ID cannot be blank");
+        }
+        if(order.getPrice().compareTo(BigDecimal.ZERO) != 1){
+            
+        }
+        if(order.getQuantity() <= 0){
+            
         }
     }
 }

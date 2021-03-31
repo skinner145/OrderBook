@@ -10,6 +10,7 @@ import com.as.orderbook.controller.dao.OrderBookOrderDao;
 import com.as.orderbook.controller.dao.OrderBookOrderDaoFileImpl;
 import com.as.orderbook.controller.dao.OrderBookTradeDao;
 import com.as.orderbook.controller.dao.OrderBookTradeDaoFileImpl;
+import com.as.orderbook.controller.service.OrderBookOrderIDException;
 import com.as.orderbook.controller.service.OrderBookServiceLayer;
 import com.as.orderbook.controller.service.OrderBookServiceLayerImpl;
 import com.as.orderbook.controller.view.OrderBookView;
@@ -21,7 +22,7 @@ import com.as.orderbook.controller.view.UserIOConsoleImpl;
  * @author Skininho
  */
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws OrderBookOrderIDException {
         
          UserIO myIo = new UserIOConsoleImpl();
         

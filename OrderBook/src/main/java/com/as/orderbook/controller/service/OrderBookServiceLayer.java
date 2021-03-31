@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface OrderBookServiceLayer {
     //method for creating buy and sell orders
-    void createOrders(int orderNum);
+    void createOrders(int orderNum) throws OrderBookOrderIDException;
     //add order
     Order addOrder(String orderId, Order order);
     //add buy order

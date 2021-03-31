@@ -5,6 +5,7 @@
  */
 package com.as.orderbook.controller;
 
+import com.as.orderbook.controller.service.OrderBookOrderIDException;
 import com.as.orderbook.controller.service.OrderBookServiceLayer;
 import com.as.orderbook.controller.view.OrderBookView;
 import com.as.orderbook.dto.Order;
@@ -28,7 +29,7 @@ public class OrderBookController {
         this.service = service;
     }
     
-    public void run() {
+    public void run() throws OrderBookOrderIDException{
         int input = 0;
         Boolean keepRunning = true;
         createOrders(1000);
@@ -70,8 +71,13 @@ public class OrderBookController {
             }
         }
     }
-    public void createOrders(int orderNum){
-        service.createOrders(orderNum);
+    public void createOrders(int orderNum)throws OrderBookOrderIDException{
+        try{
+            service.createOrders(orderNum);
+        }catch(OrderBookOrderIDException e){
+            
+        }
+        
     }
     public void viewOrders(){
         List<List<Order>> allOrders = service.getAllOrders();
