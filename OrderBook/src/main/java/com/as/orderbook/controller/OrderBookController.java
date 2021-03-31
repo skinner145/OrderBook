@@ -73,13 +73,11 @@ public class OrderBookController {
             }
         }
     }
-    public void createOrders(int orderNum)throws OrderBookOrderIDException, OrderBookOrderIDException{
+    public void createOrders(int orderNum)throws OrderBookOrderIDException, OrderBookOrderException{
         try{
             service.createOrders(orderNum);
-        }catch(OrderBookOrderIDException e){
-            
-        }catch(OrderBookOrderException e){
-            
+        }catch(OrderBookOrderIDException | OrderBookOrderException e){
+            view.displayError(e.getMessage());
         }
         
     }
@@ -93,7 +91,7 @@ public class OrderBookController {
             Trade matchedOrder = service.matchOrder();
             view.displayTrade(matchedOrder);
         }catch(OrderBookTradeException e){
-            
+            view.displayError(e.getMessage());
         }
     }
 }
