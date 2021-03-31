@@ -51,6 +51,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
             orderDao.addOrder(buyOrder.getID(), buyOrder);
             orderDao.addOrder(sellOrder.getID(), sellOrder);
         }
+        System.out.println(orderDao.getAllOrders().size());
     }
     
     //add's order to map in dao
