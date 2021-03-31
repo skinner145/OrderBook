@@ -29,13 +29,13 @@ public class UserIOConsoleImpl implements UserIO{
         for(int i = 0; i < length; i++){
             String output = "";
             try{
-                output = orders1.get(i).getID();
+                output = "" + orders1.get(i).getPrice();
             }catch(IndexOutOfBoundsException e){
                 output = "                  ";
             }
             output = output.concat(" --- ");
             try{
-                output = output.concat(orders2.get(i).getID());
+                output = output.concat(""+orders2.get(i).getPrice());
             }
             catch(IndexOutOfBoundsException e){
             }

@@ -47,7 +47,6 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     @Override
     public void createOrders(){
         for(int i = 0; i < 10; i++){
-            
             Order buyOrder = new BuyOrder(new BigDecimal(getRandomNum(190)),
                     getRandomNum(20, 50));
             Order sellOrder = new SellOrder(new BigDecimal(getRandomNum(190)),
@@ -55,8 +54,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
             orderDao.addOrder(buyOrder.getID(), buyOrder);
             orderDao.addOrder(sellOrder.getID(), sellOrder);
         }
+        String s= "    ";
+        System.out.println(s.length());
         orders = orderDao.getAllOrders();
-        System.out.println(orderDao.getAllOrders().size());
     }
     
     //add's order to map in dao
@@ -102,8 +102,8 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         //list that will be returned
         List<List<Order>> allOrders = new ArrayList<List<Order>>();
         //sort lists
-        buyOrders.sort((Order o1, Order o2) -> o1.getPrice().compareTo(o2.getPrice()));
-        sellOrders.sort((Order o1, Order o2) -> o1.getPrice().compareTo(o2.getPrice()));
+        buyOrders.sort((Order o1, Order o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        sellOrders.sort((Order o1, Order o2) -> o2.getPrice().compareTo(o1.getPrice()));
         //add each list to allOrders list
         allOrders.add(buyOrders);
         allOrders.add(sellOrders);
