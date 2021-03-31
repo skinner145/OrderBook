@@ -45,7 +45,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
 
     //method that creates 1000 buy and sell orders
     @Override
-    public void createOrders(int orderNum) throws OrderBookOrderIDException, OrderBookOrderException{
+    public void createOrders(int orderNum) throws OrderBookOrderException{
         clearService();
         for(int i = 0; i < orderNum; i++){
             Order buyOrder = new BuyOrder(new BigDecimal(getRandomNum(190)),
@@ -313,9 +313,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         }
     }
     
-    public void validateObject(Order order) throws OrderBookOrderIDException, OrderBookOrderException{
+    public void validateObject(Order order) throws OrderBookOrderException{
         if(order.getID().isBlank()){
-            throw new OrderBookOrderIDException("Order ID cannot be blank");
+            throw new OrderBookOrderException("Order ID cannot be blank");
         }
         if(order.getPrice().compareTo(BigDecimal.ZERO) != 1){
             throw new OrderBookOrderException("Order price must be greater than zero");
@@ -327,6 +327,15 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     public void validateObject(Trade trade) throws OrderBookTradeException{
         if(trade.getID().isBlank()){
             throw new OrderBookTradeException("Trade ID cannot be blank");
+        }
+        if(trade.getExecutedPrice().compareTo(BigDecimal.ZERO) != 1){
+            throw new OrderBookTradeException("Execution price must be greater than 0");
+        }
+        if(trade.getQuantityFilled() <=0 ){
+            throw new OrderBookTradeException("Quantity filled must be greater than 0");
+        }
+        if(trade.getExecutionTime() == 0.0d){
+            throw new OrderBookTradeException("Execution Time cannot be null");
         }
     }
 }

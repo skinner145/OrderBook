@@ -31,7 +31,7 @@ public class OrderBookController {
         this.service = service;
     }
     
-    public void run() throws OrderBookOrderIDException, OrderBookOrderException, OrderBookTradeException{
+    public void run() throws OrderBookOrderException, OrderBookTradeException{
         int input = 0;
         Boolean keepRunning = true;
         createOrders(1000);
@@ -73,10 +73,10 @@ public class OrderBookController {
             }
         }
     }
-    public void createOrders(int orderNum)throws OrderBookOrderIDException, OrderBookOrderException{
+    public void createOrders(int orderNum)throws OrderBookOrderException{
         try{
             service.createOrders(orderNum);
-        }catch(OrderBookOrderIDException | OrderBookOrderException e){
+        }catch(OrderBookOrderException e){
             view.displayError(e.getMessage());
         }
         

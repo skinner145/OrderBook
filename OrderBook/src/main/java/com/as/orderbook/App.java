@@ -24,7 +24,7 @@ import com.as.orderbook.controller.view.UserIOConsoleImpl;
  * @author Skininho
  */
 public class App {
-    public static void main(String[] args) throws OrderBookOrderIDException, OrderBookOrderException, OrderBookTradeException {
+    public static void main(String[] args) throws OrderBookOrderException, OrderBookTradeException {
         
          UserIO myIo = new UserIOConsoleImpl();
         
