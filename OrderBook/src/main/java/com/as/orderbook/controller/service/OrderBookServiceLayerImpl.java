@@ -45,7 +45,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
 
     //method that creates 1000 buy and sell orders
     @Override
-    public void createOrders(int orderNum) throws OrderBookOrderIDException{
+    public void createOrders(int orderNum) throws OrderBookOrderIDException, OrderBookOrderException{
         clearService();
         for(int i = 0; i < orderNum; i++){
             Order buyOrder = new BuyOrder(new BigDecimal(getRandomNum(190)),
@@ -312,15 +312,15 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         }
     }
     
-    public void validateOrder(Order order) throws OrderBookOrderIDException{
+    public void validateOrder(Order order) throws OrderBookOrderIDException, OrderBookOrderException{
         if(order.getID().isBlank()){
             throw new OrderBookOrderIDException("Order ID cannot be blank");
         }
         if(order.getPrice().compareTo(BigDecimal.ZERO) != 1){
-            
+            throw new OrderBookOrderException("Order price must be greater than zero");
         }
         if(order.getQuantity() <= 0){
-            
+            throw new OrderBookOrderException("Order quantity must be greater than zero");
         }
     }
 }
