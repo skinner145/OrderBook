@@ -13,6 +13,7 @@ import com.as.orderbook.controller.view.OrderBookView;
  */
 public class OrderBookController {
     private OrderBookView view;
+    
     public void run() {
         int input = 0;
         Boolean keepRunning = true;
@@ -53,5 +54,9 @@ public class OrderBookController {
                     break;
             }
         }
+    }
+    
+    public OrderBookController(OrderBookView view) {
+        this.view = view;
     }
 }
