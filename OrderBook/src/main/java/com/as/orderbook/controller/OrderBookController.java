@@ -8,6 +8,7 @@ package com.as.orderbook.controller;
 import com.as.orderbook.controller.service.OrderBookServiceLayer;
 import com.as.orderbook.controller.view.OrderBookView;
 import com.as.orderbook.dto.Order;
+import com.as.orderbook.dto.Trade;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,7 +42,7 @@ public class OrderBookController {
                     input = view.manageOrders();
                     switch(input) {
                         case 1:
-                            System.out.println("MATCH ONE ORDER NOT YET IMPLEMENTED");
+                            matchOrder();
                             break;
                         case 2:
                             System.out.println("MATCH ALL ORDERS NOT YET IMPLEMENTED");
@@ -75,5 +76,10 @@ public class OrderBookController {
     public void viewOrders(){
         List<List<Order>> allOrders = service.getAllOrders();
         view.displayOrders(allOrders);
+    }
+    
+    public void matchOrder(){
+        Trade matchedOrder = service.matchOrder();
+        view.displayTrade(matchedOrder);
     }
 }

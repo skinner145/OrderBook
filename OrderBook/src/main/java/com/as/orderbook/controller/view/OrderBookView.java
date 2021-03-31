@@ -6,6 +6,7 @@
 package com.as.orderbook.controller.view;
 
 import com.as.orderbook.dto.Order;
+import com.as.orderbook.dto.Trade;
 import java.util.List;
 import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +61,13 @@ public class OrderBookView {
     }
     
     public void displayOrders(List<List<Order>> allOrders){
-        
         List<Order> orders1 = allOrders.get(0);
         List<Order> orders2 = allOrders.get(1);
         io.print(orders1.get(0).getID());
         io.printOrderList(orders1, orders2);
+    }
+    
+    public void displayTrade(Trade trade){
+        io.print(trade.getID());
     }
 }

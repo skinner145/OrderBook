@@ -90,6 +90,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //returns a list of lists - one for buy orders - one for sell orders
     @Override
     public List<List<Order>> getAllOrders(){
+        clearService();
+        orders = orderDao.getAllOrders();
+        
         orders.forEach(order -> {
             //if order is a buy order add to buyOrders list
             if(order instanceof BuyOrder){
@@ -262,14 +265,13 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         //subtract quantity from sell and buy order
         buy.setQuantity(buy.getQuantity() - quantity);
         sell.setQuantity(sell.getQuantity() - quantity);
-        
         //update map after trade
         updateAfterMatch(buy, sell);
-        
         //create trade object
         Trade trade = new Trade(buy, sell, price);
         //add trade object in dao
-        return tradeDao.addTrade(trade.getID(), trade);
+        tradeDao.addTrade(trade.getID(), trade);
+        return trade;
     }
     
     //method to match all orders

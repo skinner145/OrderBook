@@ -24,7 +24,9 @@ public class UserIOConsoleImpl implements UserIO{
 
     @Override
     public void printOrderList(List<Order> orders1, List<Order> orders2) {
-        for(int i = 0; i < orders1.size(); i++){
+        print(orders1.size() + "   " + orders2.size());
+        int length = Math.max(orders1.size(), orders2.size());
+        for(int i = 0; i < length; i++){
             print(orders1.get(i).getID() + " --- " + orders2.get(i).getID());
         }
     }
@@ -48,5 +50,4 @@ public class UserIOConsoleImpl implements UserIO{
     public String readString(String prompt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 }

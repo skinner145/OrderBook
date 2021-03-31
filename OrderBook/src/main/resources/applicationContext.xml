@@ -19,8 +19,8 @@
 </bean>
 
 <bean id="controller" class="com.as.orderbook.controller.OrderBookController">
-    <constructor-arg ref="service" />
     <constructor-arg ref="view" />
+    <constructor-arg ref="service" />
 </bean>
 
 </beans>

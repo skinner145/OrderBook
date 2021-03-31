@@ -25,19 +25,18 @@ public class App {
         
          UserIO myIo = new UserIOConsoleImpl();
         
-        //declare and initialize view passing myIo as an argument
+        
         OrderBookView myView = new OrderBookView(myIo);
         
-        //declare and inititalize Dao
+        
         OrderBookOrderDao orderDao = new OrderBookOrderDaoFileImpl();
         OrderBookTradeDao tradeDao = new OrderBookTradeDaoFileImpl();
         
         
-        //declare and initialize service layer - passing dao and auditDao
+        
         OrderBookServiceLayer myService 
                 = new OrderBookServiceLayerImpl(orderDao, tradeDao);
         
-//        declare and initialize controller - passing service layer and view
         OrderBookController controller 
                 = new OrderBookController(myView, myService);
         
