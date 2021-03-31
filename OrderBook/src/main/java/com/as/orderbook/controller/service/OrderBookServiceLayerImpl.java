@@ -13,11 +13,7 @@ import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -28,11 +24,10 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //member fields for dao
     private OrderBookOrderDao orderDao;
     private OrderBookTradeDao tradeDao;
-    
     //list for orders
-    List<Order> orders = orderDao.getAllOrders();
-    List<Order> buyOrders = new ArrayList<>();
-    List<Order> sellOrders = new ArrayList<>();
+    private List<Order> orders;
+    private List<Order> buyOrders;
+    private List<Order> sellOrders;
     
     //random
     Random rand = new Random();
@@ -40,6 +35,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     public OrderBookServiceLayerImpl(OrderBookOrderDao orderDao, OrderBookTradeDao tradeDao){
         this.orderDao = orderDao;
         this.tradeDao = tradeDao;
+        this.orders = orderDao.getAllOrders();
+        this.buyOrders = new ArrayList<>();
+        this.sellOrders = new ArrayList<>();
     }
     
     //method that creates 1000 buy and sell orders

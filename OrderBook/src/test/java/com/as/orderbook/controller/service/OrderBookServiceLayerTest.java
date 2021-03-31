@@ -5,7 +5,9 @@
  */
 package com.as.orderbook.controller.service;
 
+import com.as.orderbook.controller.dao.OrderBookOrderDao;
 import com.as.orderbook.controller.dao.OrderBookOrderDaoFileImpl;
+import com.as.orderbook.controller.dao.OrderBookTradeDao;
 import com.as.orderbook.controller.dao.OrderBookTradeDaoFileImpl;
 import com.as.orderbook.dto.BuyOrder;
 import com.as.orderbook.dto.Order;
@@ -24,7 +26,9 @@ import org.junit.jupiter.api.Test;
  * @author Jane
  */
 public class OrderBookServiceLayerTest { //Fairly minimal, as majority of methods in the service layer are just wrapping methods from the DAO
-    OrderBookServiceLayer service = new OrderBookServiceLayerImpl(new OrderBookOrderDaoFileImpl(), new OrderBookTradeDaoFileImpl());
+    OrderBookOrderDao orderDao = new OrderBookOrderDaoFileImpl();
+    OrderBookTradeDao tradeDao = new OrderBookTradeDaoFileImpl();
+    OrderBookServiceLayer service = new OrderBookServiceLayerImpl(orderDao, tradeDao);
     BuyOrder testBuyOrder1 = new BuyOrder(BigDecimal.ONE, 123);
     BuyOrder testBuyOrder2 = new BuyOrder(BigDecimal.TEN, 456);
     List<BuyOrder> buyOrderList = new ArrayList<>();
