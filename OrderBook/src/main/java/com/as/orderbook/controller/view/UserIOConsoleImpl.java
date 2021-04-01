@@ -47,6 +47,12 @@ public class UserIOConsoleImpl implements UserIO{
     }
 
     @Override
+    public int readInt(String prompt){
+        print(prompt);
+        return userInput.nextInt();
+    }
+    
+    @Override
     public int readInt(String prompt, int min, int max) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

@@ -19,6 +19,7 @@ public interface UserIO {
     
     void printOrderList(List<Order> orders1, List<Order> orders2);
     
+    int readInt(String prompt);
     int readInt(String prompt, int min, int max);
     
     BigDecimal readBigDecimal(String prompt);

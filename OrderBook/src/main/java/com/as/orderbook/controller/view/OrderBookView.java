@@ -93,4 +93,23 @@ public class OrderBookView {
         io.print("===Error===");
         io.print(s);
     }
+    
+    public int selectPage(){
+        Boolean correctInput = false;
+        Integer input = 0;
+        while (!correctInput) {
+            io.print("1. Previous Page");
+            io.print("2. Next Page");
+            io.print("3. Back to main menu");
+            input = io.readInt("Please select from the above options");
+            if (input > 0 && input < 4) {
+                correctInput = true;
+            }
+        }
+        return input;
+    }
+    
+    public void unknownCommand(){
+        io.print("Unknown Command");
+    }
 }
