@@ -64,7 +64,12 @@ public class UserIOConsoleImpl implements UserIO{
 
     @Override
     public BigDecimal readBigDecimal(String prompt, BigDecimal min) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BigDecimal price = new BigDecimal("0");
+        while(price.compareTo(min) != 1){
+            print(prompt);
+            price = new BigDecimal(userInput.nextLine());   
+        }
+        return price;
     }
 
     @Override

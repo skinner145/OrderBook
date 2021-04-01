@@ -41,6 +41,7 @@ public class OrderBookController {
         
         while (keepRunning) {
             boolean keepShowingOrders = true;
+            boolean keepShowingTradeMenu = true;
             input = view.printMenuAndGetSelection();
             switch (input) {
                 case 1:
@@ -64,31 +65,39 @@ public class OrderBookController {
                     }
                     break;
                 case 2:
-                    displayStats();
+                    addBuyOrder();
                     break;
                 case 3:
-                    input = view.manageOrders();
-                    switch(input) {
-                        case 1:
-                            matchOrder();
-                            break;
-                        case 2:
-                            matchAllOrders();
-                            break;
-                        case 3:
-                            viewTrade();
-                            break;
-                        case 4:
-                            viewAllTrades();
-                            break;
-                        case 5:
-                            break;
-                        default:
-                            view.unknownCommand();
-                            break;
-                    }
                     break;
                 case 4:
+                    displayStats();
+                    break;
+                case 5:
+                    while(keepShowingTradeMenu){
+                        input = view.manageOrders();
+                        switch(input) {
+                            case 1:
+                                matchOrder();
+                                break;
+                            case 2:
+                                matchAllOrders();
+                                break;
+                            case 3:
+                                viewTrade();
+                                break;
+                            case 4:
+                                viewAllTrades();
+                                break;
+                            case 5:
+                                keepShowingTradeMenu = false;
+                                break;
+                            default:
+                                view.unknownCommand();
+                                break;
+                        }
+                    }
+                    break;
+                case 6:
                     System.out.println("Exiting program...");
                     keepRunning = false;
                     break;
@@ -120,6 +129,16 @@ public class OrderBookController {
     public void displayStats(){
         String stats = service.displayStats();
         view.printString(stats);
+    }
+    
+    public void addBuyOrder(){
+        try{
+            Order order = view.getNewBuyOrderInfo();
+            System.out.println(order.getID());
+            service.addOrder(order.getID(), order);
+        }catch(NumberFormatException e){
+            view.displayError("Price must be a number");
+        }
     }
     
     public void matchOrder()throws OrderBookTradeException, OrderBookOrderException{
