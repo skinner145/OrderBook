@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface OrderBookOrderDao {
     /**
-     * Adds an order object into the DAO.
+     * Adds an order object into the DAO
      * @param orderId the ID of the order object to be added
      * @param order the order object to be added
      * @return the added order
@@ -27,8 +27,8 @@ public interface OrderBookOrderDao {
      */
     Order getOrder(String orderId);
     /**
-     * Gets a sorted list of all the orders in the DAO
-     * @return a sorted list of all the orders in the DAO
+     * Gets a list of all the orders in the DAO
+     * @return a list of all the orders in the DAO
      */
     List<Order> getAllOrders();
     /**
