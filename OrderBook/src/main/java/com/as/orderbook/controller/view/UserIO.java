@@ -8,6 +8,7 @@ package com.as.orderbook.controller.view;
 import com.as.orderbook.dto.Order;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -24,6 +25,6 @@ public interface UserIO {
     
     BigDecimal readBigDecimal(String prompt);
     BigDecimal readBigDecimal(String prompt, BigDecimal min);
-    
+    LocalDateTime readDate(String prompt);
     String readString(String prompt);
 }

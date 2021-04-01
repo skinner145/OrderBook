@@ -7,6 +7,7 @@ package com.as.orderbook.controller.view;
 
 import com.as.orderbook.dto.Order;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 import org.springframework.stereotype.Component;
@@ -70,6 +71,11 @@ public class UserIOConsoleImpl implements UserIO{
             price = new BigDecimal(userInput.nextLine());   
         }
         return price;
+    }
+    
+    @Override
+    public LocalDateTime readDate(String prompt){
+        throw new UnsupportedOperationException("Not supported yet");
     }
 
     @Override

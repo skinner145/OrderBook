@@ -136,7 +136,7 @@ public class OrderBookController {
         view.printString(stats);
     }
     
-    public void addBuyOrder(){
+    public void addBuyOrder() throws OrderBookOrderException{
         try{
             Order order = view.getNewOrderInfo();
             System.out.println(order.getID());
@@ -146,7 +146,7 @@ public class OrderBookController {
         }
     }
     
-    public void addSellOrder(){
+    public void addSellOrder() throws OrderBookOrderException{
         try{
             Order order = view.getNewOrderInfo();
             System.out.println(order.getID());
