@@ -259,6 +259,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         Order sell = sellList.get(0);
         //gets the smallest quantity of the two orders
         int quantity = getSmallest(buy.getQuantity(), sell.getQuantity());
+        System.out.println("quantity: " + quantity);
         //execution price will be sell orders price
         BigDecimal price = sell.getPrice();
         
