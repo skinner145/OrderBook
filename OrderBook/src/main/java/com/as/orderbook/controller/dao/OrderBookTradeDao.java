@@ -13,16 +13,39 @@ import java.util.*;
  * @author Skininho
  */
 public interface OrderBookTradeDao {
-    //adds trade to hashmap
+    /**
+     * Adds a trade object into the DAO
+     * @param tradeId the ID of the trade object to be added
+     * @param trade the trade object to be added
+     * @return the added trade
+     */
     Trade addTrade(String tradeId, Trade trade);
-    //get trade by ID
+    /**
+     * Gets an individual trade based on the ID
+     * @param tradeId the ID of the trade being fetched
+     * @return the trade
+     */
     Trade getTrade(String tradeId);
-    //returns list of all trades
+    /**
+     * Gets a list of all the trades in the DAO
+     * @return a list of all the trades in the DAO
+     */
     List<Trade> getAllTrades();
-    //remove trade by ID
+    /**
+     * Removes an individual trade based on the ID
+     * @param tradeId the ID of the trade being removed
+     * @return the trade being removed
+     */
     Trade removeTrade(String tradeId);
-    //edit Trade by ID
+    /**
+     * Edits a trade based on the ID
+     * @param tradeId the ID of the trade being edited
+     * @param editedTrade the trade the existing trade is being updated to
+     * @return the updated trade
+     */
     Trade editTrade(String tradeId, Trade editedTrade);
-    //clears map/list in dao
+    /**
+     * Removes all trades in the DAO
+     */
     void clearDao();
 }
