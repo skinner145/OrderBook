@@ -42,6 +42,9 @@ public class OrderBookController {
                     viewOrders();
                     break;
                 case 2:
+                    System.out.println("Display Stats has not been implemented yet");
+                    break;
+                case 3:
                     input = view.manageOrders();
                     switch(input) {
                         case 1:
@@ -63,7 +66,7 @@ public class OrderBookController {
                             break;
                     }
                     break;
-                case 3:
+                case 4:
                     System.out.println("Exiting program...");
                     keepRunning = false;
                     break;

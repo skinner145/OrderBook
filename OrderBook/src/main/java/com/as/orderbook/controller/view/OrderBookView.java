@@ -33,10 +33,11 @@ public class OrderBookView {
         while (!correctInput) {
             System.out.println("<<Orderbook>>");
             System.out.println("1. View Orderbook");
-            System.out.println("2. Manage Orders");
-            System.out.println("3. Exit Program");
+            System.out.println("2. Display Order Book Stats");
+            System.out.println("3. Manage Orders");
+            System.out.println("4. Exit Program");
             input = inputReader.nextInt();
-            if (input > 0 && input < 4) {
+            if (input > 0 && input < 5) {
                 correctInput = true;
             }
         }
