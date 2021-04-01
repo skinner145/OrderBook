@@ -88,7 +88,8 @@ public class OrderBookController {
     
     public void matchOrder()throws OrderBookTradeException{
         try{
-            Trade matchedOrder = service.matchOrder();
+            List<List<Order>> allOrders = service.getAllOrders();
+            Trade matchedOrder = service.matchOrder(allOrders.get(0), allOrders.get(1));
             System.out.println(matchedOrder.getExecutionTime());
             view.displayTrade(matchedOrder);
         }catch(OrderBookTradeException e){

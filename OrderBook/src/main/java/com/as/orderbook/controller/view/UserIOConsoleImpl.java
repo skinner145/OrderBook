@@ -8,6 +8,7 @@ package com.as.orderbook.controller.view;
 import com.as.orderbook.dto.Order;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Scanner;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserIOConsoleImpl implements UserIO{
 
+    Scanner userInput = new Scanner(System.in);
+    
     @Override
     public void print(String msg) {
         System.out.println(msg);
@@ -60,6 +63,7 @@ public class UserIOConsoleImpl implements UserIO{
 
     @Override
     public String readString(String prompt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        print(prompt);
+        return userInput.nextLine();
     }
 }
