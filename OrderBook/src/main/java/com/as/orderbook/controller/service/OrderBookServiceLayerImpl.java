@@ -262,10 +262,12 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         //update map after trade
         updateAfterMatch(buy, sell);
         //create trade object
-        Trade trade = new Trade(buy, sell, price);
+        Trade trade = new Trade(buy, sell, quantity, price);
         validateObject(trade);
         //add trade object in dao
         tradeDao.addTrade(trade.getID(), trade);
+
+        System.out.println(trade.getExecutionTime() + " TIME ");
         return trade;
     }
     

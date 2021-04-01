@@ -21,16 +21,12 @@ public class Trade {
     private Order buyOrder;
     private Order sellOrder;
 
-    public Trade(Order buyOrder, Order sellOrder, BigDecimal executedPrice) {
+    public Trade(Order buyOrder, Order sellOrder, Integer quantityFilled, BigDecimal executedPrice) {
         Double startTime = (double)System.nanoTime();
         this.buyOrder = buyOrder;
         this.sellOrder = sellOrder;
         this.executedPrice = executedPrice;
-        if (buyOrder.getQuantity() <= sellOrder.getQuantity()) {
-            this.quantityFilled = buyOrder.getQuantity();
-        } else {
-            this.quantityFilled = sellOrder.getQuantity();
-        }
+        this.quantityFilled = quantityFilled;
         this.ID = "TRADE" + this.quantityFilled + LocalDateTime.now().toString();
         Double endTime = (double)System.nanoTime();
         this.executionTime = (endTime - startTime) / 1000000; //Getting the execution time of the constructor
@@ -101,4 +97,11 @@ public class Trade {
         }
         return Objects.equals(this.sellOrder, other.sellOrder);
     }
+
+    @Override
+    public String toString() {
+        return "Trade{" + "ID=" + ID + ", executionTime=" + executionTime + ", quantityFilled=" + quantityFilled + ", executedPrice=" + executedPrice + ", buyOrder=" + buyOrder + ", sellOrder=" + sellOrder + '}';
+    }
+    
+    
 }

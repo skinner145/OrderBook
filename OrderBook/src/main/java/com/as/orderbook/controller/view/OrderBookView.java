@@ -67,6 +67,11 @@ public class OrderBookView {
         io.printOrderList(orders1, orders2);
     }
     
+    public void displayAllTrades(List<Trade> trades){
+        io.print("" +trades.size());
+        trades.stream().forEach((t) -> io.print(t.toString()));
+    }
+    
     public void displayTrade(Trade trade){
         io.print(trade.getID());
     }
