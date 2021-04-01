@@ -56,7 +56,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     }
 
     @Test
-    public void testIsSorted() { //Also tests getAllOrders
+    public void testIsSorted() throws OrderBookOrderException{ //Also tests getAllOrders
         service.clearService();
         service.createOrders(10);
         Boolean isSorted = true;
@@ -83,7 +83,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     }
     
     @Test
-    public void testStats() {
+    public void testStats() throws OrderBookOrderException {
         service.clearService();
         service.createOrders(10);
         Boolean isValid = false;
@@ -113,16 +113,17 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     }
     
     @Test
-    public void testMatchOrder() {
+    public void testMatchOrder() throws OrderBookOrderException, OrderBookTradeException {
         service.clearService();
         service.createOrders(10);
-        Trade tradeMatch = service.matchOrder();
+        List<List<Order>> orderList = service.getAllOrders();
+        Trade tradeMatch = service.matchOrder(orderList.get(0), orderList.get(1));
         System.out.println("trade id: " + tradeMatch.getID());
         assertTrue(tradeMatch.getID().matches("TRADE\\d+.*"), "Trade id doesn't match format");
     }
     
     @Test
-    public void testMatchAllOrders() {
+    public void testMatchAllOrders() throws OrderBookOrderException, OrderBookTradeException {
         service.clearService();
         service.createOrders(10);
         service.matchAllOrders();

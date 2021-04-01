@@ -26,17 +26,15 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     private OrderBookOrderDao orderDao;
     private OrderBookTradeDao tradeDao;
     
+    int count; //for use in functions
+    BigDecimal price;
+    
     //constructor
 
     public OrderBookServiceLayerImpl(OrderBookOrderDao orderDao, OrderBookTradeDao tradeDao) {
         this.orderDao = orderDao;
         this.tradeDao = tradeDao;
     }
-    
-    //list for orders
-    List<Order> orders = new ArrayList<>();
-    List<Order> buyOrders = new ArrayList<>();
-    List<Order> sellOrders = new ArrayList<>();
     
     //random
     Random rand = new Random();
@@ -53,33 +51,14 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
             validateObject(buyOrder);
             validateObject(sellOrder);
             orderDao.addOrder(buyOrder.getID(), buyOrder);
-            buyOrders.add(buyOrder);
             orderDao.addOrder(sellOrder.getID(), sellOrder);
-            sellOrders.add(sellOrder);
         }
-        
-        orders = orderDao.getAllOrders();
     }
     
     //add's order to map in dao
     @Override
     public Order addOrder(String orderId, Order newOrder){
-        orders.add(newOrder);
         return orderDao.addOrder(orderId, newOrder);
-    }
-
-    //add's buy order to map in dao
-    @Override
-    public Order addBuyOrder(String orderId, Order order){
-        buyOrders.add(order);
-        return orderDao.addOrder(orderId, order);
-    }
-    
-    //add's sell order to map in dao
-    @Override
-    public Order addSellOrder(String orderId, Order order){
-        sellOrders.add(order);
-        return orderDao.addOrder(orderId, order);
     }
     
     //get order by ID
@@ -91,7 +70,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //returns a list of lists - one for buy orders - one for sell orders
     @Override
     public List<List<Order>> getAllOrders(){
-        orders = orderDao.getAllOrders();
+        List <Order> orders = orderDao.getAllOrders();
+        List <Order> buyOrders = new ArrayList<>();
+        List <Order> sellOrders = new ArrayList<>();
         orders.forEach(order -> {
             //if order is a buy order add to buyOrders list
             if(order instanceof BuyOrder){
@@ -118,14 +99,12 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //remove Order by ID
     @Override
     public Order removeOrder(String orderId){
-        orders.remove(orderDao.getOrder(orderId));
         return orderDao.removeOrder(orderId);
     }
     
     //edit Order by ID
     @Override
     public Order editOrder(String orderId, Order editedOrder){
-        orders.set(orders.indexOf(orderDao.getOrder(orderId)), editedOrder);
         return orderDao.editOrder(orderId, editedOrder);
     }
     
@@ -171,40 +150,59 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //returns number of sell orders
     @Override
     public int getNumOfSellOrders() {
-        return sellOrders.size();
+        count = 0;
+        orderDao.getAllOrders().forEach(order -> {
+            if(order instanceof SellOrder){
+                count++;
+            }
+        });
+        return count;
     }
 
     //returns number of buy orders
     @Override
     public int getNumOfBuyOrders() {
-        buyOrders.forEach((i) -> {
-            System.out.println(i);
+        count = 0;
+        orderDao.getAllOrders().forEach(order -> {
+            if(order instanceof BuyOrder){
+                count++;
+            }
         });
-        return buyOrders.size();
+        return count;
     }
 
     //adds quantity of all sell orders together and returns them
     @Override
     public int getSellQuantity() {
-        int count = 0;
-        count = sellOrders.stream().map(order -> order.getQuantity()).reduce(count, Integer::sum);
+        count = 0;
+        orderDao.getAllOrders().forEach(order -> {
+            if(order instanceof SellOrder){
+                count += order.getQuantity();
+            }
+        });
         return count;
     }
 
     //adds quantity of all buy orders together and returns them
     @Override
     public int getBuyQuantity() {
-        int count = 0;
-        count = buyOrders.stream().map(order -> order.getQuantity()).reduce(count, Integer::sum);
+        count = 0;
+        orderDao.getAllOrders().forEach(order -> {
+            if(order instanceof BuyOrder){
+                count += order.getQuantity();
+            }
+        });
         return count;
     }
 
     //adds all sell prices together then divide by number of sell orders
     @Override
     public BigDecimal getAverageSellPrice() {
-        BigDecimal price = new BigDecimal("0");
-        sellOrders.forEach(order -> {
-            price.add(order.getPrice());
+        price = new BigDecimal("0");
+        orderDao.getAllOrders().forEach(order -> {
+            if(order instanceof SellOrder){
+                price = price.add(order.getPrice());
+            }
         });
         return price.divide(new BigDecimal(getNumOfSellOrders()));
     }
@@ -212,9 +210,11 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //adds all buy prices together then divide by number of buy orders
     @Override
     public BigDecimal getAverageBuyPrice() {
-        BigDecimal price = new BigDecimal("0");
-        buyOrders.forEach(order -> {
-            price.add(order.getPrice());
+        price = new BigDecimal("0");
+        orderDao.getAllOrders().forEach(order -> {
+            if(order instanceof BuyOrder){
+                price = price.add(order.getPrice());
+            }
         });
         return price.divide(new BigDecimal(getNumOfBuyOrders()));
     }
@@ -233,9 +233,6 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //clears lists in service layer
     @Override
     public void clearService(){
-        orders.clear();
-        buyOrders.clear();
-        sellOrders.clear();
         orderDao.clearDao();
         tradeDao.clearDao();
     }
@@ -243,19 +240,17 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //if buy orders or sell orders = 0 or less - order book is empty
     @Override
     public boolean checkIfEmpty(){
-        System.out.println("buy orders left: " + buyOrders.size());
-        System.out.println("sell orders left: " + sellOrders.size());
-        return (buyOrders.size() < 0 && sellOrders.size() < 0);
+        System.out.println("buy orders left: " + getNumOfBuyOrders());
+        System.out.println("sell orders left: " + getNumOfSellOrders());
+        return (getNumOfBuyOrders() < 0 && getNumOfSellOrders() < 0);
     }
     
     //matches sell order with buy order
     @Override
-    public Trade matchOrder() throws OrderBookTradeException{
-        //gets up-to-date list
-        getAllOrders();
+    public Trade matchOrder(List<Order> buyList, List<Order> sellList) throws OrderBookTradeException{
         //gets the buy and sell order with the highest price
-        Order buy = buyOrders.get(0);
-        Order sell = sellOrders.get(0);
+        Order buy = buyList.get(0);
+        Order sell = sellList.get(0);
         //gets the smallest quantity of the two orders
         int quantity = getSmallest(buy.getQuantity(), sell.getQuantity());
         //execution price will be sell orders price
@@ -277,10 +272,10 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //method to match all orders
     @Override
     public void matchAllOrders() throws OrderBookTradeException{
-        //while buy and sell orders list is not empty
+        List<List<Order>> orderList = getAllOrders();
         while(!checkIfEmpty()){
             //match order method
-            matchOrder();
+            matchOrder(orderList.get(0), orderList.get(1));
         }
     }
     
@@ -321,6 +316,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
             throw new OrderBookOrderException("Order quantity must be greater than zero");
         }
     }
+    
     public void validateObject(Trade trade) throws OrderBookTradeException{
         if(trade.getID().isBlank()){
             throw new OrderBookTradeException("Trade ID cannot be blank");

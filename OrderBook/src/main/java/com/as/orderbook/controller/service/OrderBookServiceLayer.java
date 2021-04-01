@@ -5,9 +5,7 @@
  */
 package com.as.orderbook.controller.service;
 
-import com.as.orderbook.dto.BuyOrder;
 import com.as.orderbook.dto.Order;
-import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,10 +20,6 @@ public interface OrderBookServiceLayer {
     //add order
     Order addOrder(String orderId, Order order);
     //add buy order
-    Order addBuyOrder(String orderId, Order order);
-    //add sell order
-    Order addSellOrder(String orderId, Order order);
-    //get order by ID
     Order getOrder(String orderId);
     //gets list of buy orders and list of sell orders
     List<List<Order>> getAllOrders();
@@ -62,7 +56,7 @@ public interface OrderBookServiceLayer {
     //check if orderbook is empty
     boolean checkIfEmpty();
     //match order
-    Trade matchOrder() throws OrderBookTradeException;
+    Trade matchOrder(List<Order> buyList, List<Order> sellList) throws OrderBookTradeException;
     //match all orders
     void matchAllOrders()throws OrderBookTradeException;
 }
