@@ -37,7 +37,7 @@ public class OrderBookController {
     public void run() throws OrderBookOrderException, OrderBookTradeException{
         int input = 0;
         Boolean keepRunning = true;
-        createOrders(20);
+        createOrders(25);
         
         while (keepRunning) {
             boolean keepShowingOrders = true;
@@ -192,6 +192,13 @@ public class OrderBookController {
         int lastItem = itemsPerPage * page;
         int firstItem = lastItem - itemsPerPage;
         getLastPage(allOrders);
+        
+        if(page == lastPage){
+            lastItem = firstItem + Math.max(service.getNumOfBuyOrders(), service.getNumOfSellOrders()) % itemsPerPage;
+        }
+
+        System.out.println(page + " --- " + lastPage + " ---- " + lastItem);
+        System.out.println("Here " + (Math.max(service.getNumOfBuyOrders(), service.getNumOfSellOrders()) % itemsPerPage));
         List currentBuyOrders = allOrders.get(0).subList(firstItem, lastItem);
         List currentSellOrders = allOrders.get(1).subList(firstItem, lastItem);
         allOrders.clear();
@@ -210,6 +217,8 @@ public class OrderBookController {
     
     public void getLastPage(List<List<Order>> orders){
         int length = Math.max(orders.get(0).size(), orders.get(1).size());
-        lastPage = (int) Math.ceil(length/itemsPerPage);
+        System.out.println(length);
+        lastPage = (int) Math.ceil((double)length/(double)itemsPerPage);
+        System.out.println(lastPage);
     }
 }
