@@ -5,19 +5,11 @@
  */
 package com.as.orderbook;
 
+import com.as.orderbook.config.SpringConfig;
 import com.as.orderbook.controller.OrderBookController;
-import com.as.orderbook.controller.dao.OrderBookOrderDao;
-import com.as.orderbook.controller.dao.OrderBookOrderDaoFileImpl;
-import com.as.orderbook.controller.dao.OrderBookTradeDao;
-import com.as.orderbook.controller.dao.OrderBookTradeDaoFileImpl;
 import com.as.orderbook.controller.service.OrderBookOrderException;
-import com.as.orderbook.controller.service.OrderBookOrderIDException;
-import com.as.orderbook.controller.service.OrderBookServiceLayer;
-import com.as.orderbook.controller.service.OrderBookServiceLayerImpl;
 import com.as.orderbook.controller.service.OrderBookTradeException;
-import com.as.orderbook.controller.view.OrderBookView;
-import com.as.orderbook.controller.view.UserIO;
-import com.as.orderbook.controller.view.UserIOConsoleImpl;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  *
@@ -25,23 +17,10 @@ import com.as.orderbook.controller.view.UserIOConsoleImpl;
  */
 public class App {
     public static void main(String[] args) throws OrderBookOrderException, OrderBookTradeException {
+        AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext(SpringConfig.class);
+        ((AnnotationConfigApplicationContext)appContext).scan("com.sg.flooringmastery.controller");
         
-         UserIO myIo = new UserIOConsoleImpl();
-        
-        
-        OrderBookView myView = new OrderBookView(myIo);
-        
-        
-        OrderBookOrderDao orderDao = new OrderBookOrderDaoFileImpl();
-        OrderBookTradeDao tradeDao = new OrderBookTradeDaoFileImpl();
-        
-        
-        
-        OrderBookServiceLayer myService 
-                = new OrderBookServiceLayerImpl(orderDao, tradeDao);
-        
-        OrderBookController controller 
-                = new OrderBookController(myView, myService);
+        OrderBookController controller = (OrderBookController) appContext.getBean("mainController");
         
         controller.run();
     }
