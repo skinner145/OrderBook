@@ -126,10 +126,12 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         return tradeDao.getTrade(tradeId);
     }
     
-    //returns list of all Trades
+    //Get all Trades
     @Override
-    public List<Trade> getAllTrades(){
-        return tradeDao.getAllTrades();
+    public List<Trade> getAllTrades() {
+        List<Trade> trades = tradeDao.getAllTrades();
+        trades.sort((Trade t1, Trade t2) -> t2.getExecutionTime().compareTo(t1.getExecutionTime()));
+        return trades;
     }
     
     //remove Trade by ID
