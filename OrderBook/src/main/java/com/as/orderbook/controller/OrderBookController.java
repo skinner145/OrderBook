@@ -42,7 +42,7 @@ public class OrderBookController {
                     viewOrders();
                     break;
                 case 2:
-                    System.out.println("Display Stats has not been implemented yet");
+                    displayStats();
                     break;
                 case 3:
                     input = view.manageOrders();
@@ -92,6 +92,11 @@ public class OrderBookController {
             view.displayError(e.getMessage());
         }
         
+    }
+    
+    public void displayStats(){
+        String stats = service.displayStats();
+        view.printString(stats);
     }
     
     public void matchOrder()throws OrderBookTradeException, OrderBookOrderException{
