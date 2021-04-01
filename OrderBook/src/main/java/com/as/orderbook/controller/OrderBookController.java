@@ -81,25 +81,32 @@ public class OrderBookController {
         }
         
     }
-    public void viewOrders(){
-        List<List<Order>> allOrders = service.getAllOrders();
-        view.displayOrders(allOrders);
+    public void viewOrders()throws OrderBookOrderException{
+        try{
+            List<List<Order>> allOrders = service.getAllOrders();
+            view.displayOrders(allOrders);
+        }catch(OrderBookOrderException e){
+            view.displayError(e.getMessage());
+        }
+        
     }
     
-    public void matchOrder()throws OrderBookTradeException{
+    public void matchOrder()throws OrderBookTradeException, OrderBookOrderException{
         try{
             List<List<Order>> allOrders = service.getAllOrders();
             Trade matchedOrder = service.matchOrder(allOrders.get(0), allOrders.get(1));
             System.out.println(matchedOrder.getExecutionTime());
             view.displayTrade(matchedOrder);
-        }catch(OrderBookTradeException e){
+        }catch(OrderBookTradeException | OrderBookOrderException e){
             view.displayError(e.getMessage());
         }
     }
-    public void matchAllOrders() throws OrderBookTradeException{
+    public void matchAllOrders() throws OrderBookTradeException, OrderBookOrderException{
         try{
             service.matchAllOrders();
-        }catch(OrderBookTradeException e){
+        }catch(OrderBookTradeException | OrderBookOrderException e){
+            view.displayError(e.getMessage());
+        }catch(IndexOutOfBoundsException e){
             view.displayError(e.getMessage());
         }
     }

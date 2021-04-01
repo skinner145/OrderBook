@@ -20,9 +20,9 @@ public interface OrderBookServiceLayer {
     //add order
     Order addOrder(String orderId, Order order);
     //add buy order
-    Order getOrder(String orderId);
+    Order getOrder(String orderId) throws OrderBookOrderException;
     //gets list of buy orders and list of sell orders
-    List<List<Order>> getAllOrders();
+    List<List<Order>> getAllOrders() throws OrderBookOrderException;
     //remove order by ID
     Order removeOrder(String orderId);
     //edit order by ID
@@ -58,5 +58,5 @@ public interface OrderBookServiceLayer {
     //match order
     Trade matchOrder(List<Order> buyList, List<Order> sellList) throws OrderBookTradeException;
     //match all orders
-    void matchAllOrders()throws OrderBookTradeException;
+    void matchAllOrders()throws OrderBookTradeException, OrderBookOrderException;
 }

@@ -63,14 +63,20 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //get order by ID
     @Override
-    public Order getOrder(String orderId){
+    public Order getOrder(String orderId) throws OrderBookOrderException{
+        if(orderDao.getOrder(orderId) == null){
+            throw new OrderBookOrderException("No matching order");
+        }
         return orderDao.getOrder(orderId);
     }
     
     //returns a list of lists - one for buy orders - one for sell orders
     @Override
-    public List<List<Order>> getAllOrders(){
+    public List<List<Order>> getAllOrders() throws OrderBookOrderException{
         List <Order> orders = orderDao.getAllOrders();
+        if(orders.isEmpty()){
+            throw new OrderBookOrderException("There are no orders");
+        }
         List <Order> buyOrders = new ArrayList<>();
         List <Order> sellOrders = new ArrayList<>();
         orders.forEach(order -> {
@@ -273,7 +279,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //method to match all orders
     @Override
-    public void matchAllOrders() throws OrderBookTradeException{
+    public void matchAllOrders() throws OrderBookTradeException, OrderBookOrderException{
         while(!checkIfEmpty()){
             List<List<Order>> orderList = getAllOrders();
             //match order method

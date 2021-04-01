@@ -63,7 +63,6 @@ public class OrderBookView {
     public void displayOrders(List<List<Order>> allOrders){
         List<Order> orders1 = allOrders.get(0);
         List<Order> orders2 = allOrders.get(1);
-        io.print(orders1.get(0).getID());
         io.printOrderList(orders1, orders2);
     }
     
