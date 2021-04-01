@@ -68,6 +68,7 @@ public class OrderBookController {
                     addBuyOrder();
                     break;
                 case 3:
+                    addSellOrder();
                     break;
                 case 4:
                     displayStats();
@@ -133,7 +134,17 @@ public class OrderBookController {
     
     public void addBuyOrder(){
         try{
-            Order order = view.getNewBuyOrderInfo();
+            Order order = view.getNewOrderInfo();
+            System.out.println(order.getID());
+            service.addOrder(order.getID(), order);
+        }catch(NumberFormatException e){
+            view.displayError("Price must be a number");
+        }
+    }
+    
+    public void addSellOrder(){
+        try{
+            Order order = view.getNewOrderInfo();
             System.out.println(order.getID());
             service.addOrder(order.getID(), order);
         }catch(NumberFormatException e){

@@ -76,7 +76,7 @@ public class OrderBookView {
         io.printOrderList(orders1, orders2);
     }
     
-    public Order getNewBuyOrderInfo(){
+    public Order getNewOrderInfo(){
         BigDecimal price = io.readBigDecimal("Please input the price of the buy order", BigDecimal.ZERO);
         int quantity = io.readInt("Please input the quantity");
         return new BuyOrder(price, quantity);
