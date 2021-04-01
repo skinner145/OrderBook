@@ -5,6 +5,7 @@
  */
 package com.as.orderbook.controller.view;
 
+import com.as.orderbook.controller.service.OrderBookTradeException;
 import com.as.orderbook.dto.Order;
 import com.as.orderbook.dto.Trade;
 import java.util.List;
@@ -72,7 +73,15 @@ public class OrderBookView {
     }
     
     public void displayTrade(Trade trade){
-        io.print(trade.getID());
+        io.print(trade.toString());
+    }
+    
+    public String getId(String msg) throws OrderBookTradeException{
+        String id = io.readString(msg);
+        if(id.isBlank()){
+            throw new OrderBookTradeException("ID cannot be blank");
+        }
+        return id;
     }
     
     public void displayError(String s){

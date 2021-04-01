@@ -51,7 +51,7 @@ public class OrderBookController {
                             matchAllOrders();
                             break;
                         case 3:
-                            System.out.println("VIEW A TRADE NOT YET IMPLEMENTED");
+                            viewTrade();
                             break;
                         case 4:
                             viewAllTrades();
@@ -110,6 +110,18 @@ public class OrderBookController {
             view.displayError(e.getMessage());
         }
     }
+    
+    public void viewTrade() throws OrderBookTradeException{
+        try{
+            String tradeID = view.getId("Please input a Trade ID");
+            Trade trade = service.getTrade(tradeID);
+            view.displayTrade(trade);
+        }catch(OrderBookTradeException e){
+            view.displayError(e.getMessage());
+        }
+        
+    }
+    
     public void viewAllTrades(){
         List<Trade> trades = service.getAllTrades();
         view.displayAllTrades(trades);
