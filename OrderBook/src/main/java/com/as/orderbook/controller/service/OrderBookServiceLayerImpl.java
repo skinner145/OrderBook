@@ -242,7 +242,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     public boolean checkIfEmpty(){
         System.out.println("buy orders left: " + getNumOfBuyOrders());
         System.out.println("sell orders left: " + getNumOfSellOrders());
-        return (getNumOfBuyOrders() < 0 && getNumOfSellOrders() < 0);
+        return (getNumOfBuyOrders() <= 0 || getNumOfSellOrders() <= 0);
     }
     
     //matches sell order with buy order
@@ -274,8 +274,8 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //method to match all orders
     @Override
     public void matchAllOrders() throws OrderBookTradeException{
-        List<List<Order>> orderList = getAllOrders();
         while(!checkIfEmpty()){
+            List<List<Order>> orderList = getAllOrders();
             //match order method
             matchOrder(orderList.get(0), orderList.get(1));
         }
