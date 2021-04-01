@@ -5,7 +5,9 @@
  */
 package com.as.orderbook.controller.dao;
 
+import com.as.orderbook.controller.service.OrderBookTradeException;
 import com.as.orderbook.dto.Trade;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -26,6 +28,13 @@ public interface OrderBookTradeDao {
      * @return the trade
      */
     Trade getTrade(String tradeId);
+    /**
+     * Gets an individual trade based on the given LocalDateTime object
+     * @param dateTime the date and time of the trade being fetched
+     * @return the trade
+     * @throws OrderBookTradeException if the trade in question doesn't exist
+     */
+    Trade getTrade(LocalDateTime dateTime) throws OrderBookTradeException;
     /**
      * Gets a list of all the trades in the DAO
      * @return a list of all the trades in the DAO

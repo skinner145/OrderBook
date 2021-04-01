@@ -20,6 +20,7 @@ public class Trade {
     private BigDecimal executedPrice;
     private Order buyOrder;
     private Order sellOrder;
+    private LocalDateTime dateTime;
 
     public Trade(Order buyOrder, Order sellOrder, Integer quantityFilled, BigDecimal executedPrice) {
         Double startTime = (double)System.nanoTime();
@@ -27,9 +28,18 @@ public class Trade {
         this.sellOrder = sellOrder;
         this.executedPrice = executedPrice;
         this.quantityFilled = quantityFilled;
-        this.ID = "TRADE" + this.quantityFilled + LocalDateTime.now().toString();
+        this.dateTime = LocalDateTime.now();
+        this.ID = "TRADE" + this.quantityFilled + dateTime.toString();
         Double endTime = (double)System.nanoTime();
         this.executionTime = (endTime - startTime) / 1000000; //Getting the execution time of the constructor
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getID() {

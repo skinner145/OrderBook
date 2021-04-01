@@ -12,6 +12,7 @@ import com.as.orderbook.dto.Order;
 import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -156,6 +157,15 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         Trade trade = tradeDao.getTrade(tradeId);
         if(trade == null){
             throw new OrderBookTradeException("There's is no matching Trade for ID :" + tradeId);
+        }
+        return trade;
+    }
+    
+    @Override
+    public Trade getTrade(LocalDateTime dateTime) throws OrderBookTradeException {
+        Trade trade = tradeDao.getTrade(dateTime);
+        if(trade == null){
+            throw new OrderBookTradeException("There's is no matching Trade for date :" + dateTime);
         }
         return trade;
     }

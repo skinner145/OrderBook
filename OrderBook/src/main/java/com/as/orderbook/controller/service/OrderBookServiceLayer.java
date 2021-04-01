@@ -8,6 +8,7 @@ package com.as.orderbook.controller.service;
 import com.as.orderbook.dto.Order;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -65,9 +66,16 @@ public interface OrderBookServiceLayer {
      * Wraps the getTrade method of the DAO
      * @param tradeId the ID of the trade being fetched
      * @return the trade
-     * @throws OrderBookTradeException if the trade is invalid
+     * @throws OrderBookTradeException if the trade doesn't exist
      */
     Trade getTrade(String tradeId) throws OrderBookTradeException;
+    /**
+     * Wraps the getTrade method of the DAO
+     * @param dateTime the date and time of the trade being fetched
+     * @return the trade
+     * @throws OrderBookTradeException if the order doesn't exist
+     */
+    Trade getTrade(LocalDateTime dateTime) throws OrderBookTradeException;
     /**
      * Returns a list of trades sorted by execution time
      * @return a sorted list of trades

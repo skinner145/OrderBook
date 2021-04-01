@@ -5,9 +5,10 @@
  */
 package com.as.orderbook.controller.dao;
 
+import com.as.orderbook.controller.service.OrderBookTradeException;
 import com.as.orderbook.dto.Trade;
+import java.time.LocalDateTime;
 import java.util.*;
-import org.springframework.stereotype.Component;
 
 /**
  *
@@ -28,6 +29,17 @@ public class OrderBookTradeDaoFileImpl implements OrderBookTradeDao{
     @Override
     public Trade getTrade(String tradeId){
         return trades.get(tradeId);
+    }
+    
+    //gets trade from map by DateTime
+    @Override
+    public Trade getTrade(LocalDateTime dateTime) throws OrderBookTradeException{
+        for(Trade i: getAllTrades()) {
+            if (i.getDateTime().equals(dateTime)) {
+                return i;
+            }
+        }
+        return null;
     }
     
     //returns list of all trade objects from trades map
