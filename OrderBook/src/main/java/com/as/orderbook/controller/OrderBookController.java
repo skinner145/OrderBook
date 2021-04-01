@@ -9,6 +9,7 @@ import com.as.orderbook.controller.service.OrderBookOrderException;
 import com.as.orderbook.controller.service.OrderBookOrderIDException;
 import com.as.orderbook.controller.service.OrderBookServiceLayer;
 import com.as.orderbook.controller.service.OrderBookTradeException;
+import com.as.orderbook.controller.view.OrderBookIDException;
 import com.as.orderbook.controller.view.OrderBookView;
 import com.as.orderbook.dto.Order;
 import com.as.orderbook.dto.Trade;
@@ -34,7 +35,7 @@ public class OrderBookController {
         this.service = service;
     }
     
-    public void run() throws OrderBookOrderException, OrderBookTradeException{
+    public void run() throws OrderBookOrderException, OrderBookTradeException, OrderBookIDException{
         int input = 0;
         Boolean keepRunning = true;
         createOrders(25);
@@ -71,9 +72,12 @@ public class OrderBookController {
                     addSellOrder();
                     break;
                 case 4:
-                    displayStats();
+                    editOrder();
                     break;
                 case 5:
+                    displayStats();
+                    break;
+                case 6:
                     while(keepShowingTradeMenu){
                         input = view.manageOrders();
                         switch(input) {
@@ -98,7 +102,7 @@ public class OrderBookController {
                         }
                     }
                     break;
-                case 6:
+                case 7:
                     System.out.println("Exiting program...");
                     keepRunning = false;
                     break;
@@ -152,6 +156,17 @@ public class OrderBookController {
         }
     }
     
+    public void editOrder() throws OrderBookIDException, OrderBookOrderException{
+        try{
+            String orderID = view.getId("Please input the ID of the order you wish to edit");
+            Order order = service.getOrder(orderID);
+            order = view.editOrderInfo(order);
+            service.editOrder(order.getID(), order);
+        }catch(OrderBookIDException | OrderBookOrderException e){
+            view.displayError(e.getMessage());
+        }
+    }
+    
     public void matchOrder()throws OrderBookTradeException, OrderBookOrderException{
         try{
             List<List<Order>> allOrders = service.getAllOrders();
@@ -172,12 +187,12 @@ public class OrderBookController {
         }
     }
     
-    public void viewTrade() throws OrderBookTradeException{
+    public void viewTrade() throws OrderBookIDException, OrderBookTradeException{
         try{
             String tradeID = view.getId("Please input a Trade ID");
             Trade trade = service.getTrade(tradeID);
             view.displayTrade(trade);
-        }catch(OrderBookTradeException e){
+        }catch(OrderBookIDException | OrderBookTradeException e){
             view.displayError(e.getMessage());
         }
         
@@ -189,18 +204,17 @@ public class OrderBookController {
     }
     
     public List<List<Order>> getCurrentOrders(List<List<Order>> allOrders){
-        int lastItem = itemsPerPage * page;
-        int firstItem = lastItem - itemsPerPage;
+        int lastItem1 = itemsPerPage * page;
+        int lastItem2 = itemsPerPage * page;
+        int firstItem = lastItem1 - itemsPerPage;
         getLastPage(allOrders);
         
         if(page == lastPage){
-            lastItem = firstItem + Math.max(service.getNumOfBuyOrders(), service.getNumOfSellOrders()) % itemsPerPage;
+            lastItem1 = firstItem + (service.getNumOfBuyOrders() % itemsPerPage);
+            lastItem2 = firstItem + (service.getNumOfSellOrders()% itemsPerPage);
         }
-
-        System.out.println(page + " --- " + lastPage + " ---- " + lastItem);
-        System.out.println("Here " + (Math.max(service.getNumOfBuyOrders(), service.getNumOfSellOrders()) % itemsPerPage));
-        List currentBuyOrders = allOrders.get(0).subList(firstItem, lastItem);
-        List currentSellOrders = allOrders.get(1).subList(firstItem, lastItem);
+        List currentBuyOrders = allOrders.get(0).subList(firstItem, lastItem1);
+        List currentSellOrders = allOrders.get(1).subList(firstItem, lastItem2);
         allOrders.clear();
         allOrders.add(currentBuyOrders);
         allOrders.add(currentSellOrders);

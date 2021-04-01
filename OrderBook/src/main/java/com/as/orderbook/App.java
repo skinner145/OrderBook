@@ -9,6 +9,7 @@ import com.as.orderbook.config.SpringConfig;
 import com.as.orderbook.controller.OrderBookController;
 import com.as.orderbook.controller.service.OrderBookOrderException;
 import com.as.orderbook.controller.service.OrderBookTradeException;
+import com.as.orderbook.controller.view.OrderBookIDException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * @author Skininho
  */
 public class App {
-    public static void main(String[] args) throws OrderBookOrderException, OrderBookTradeException {
+    public static void main(String[] args) throws OrderBookOrderException, OrderBookTradeException, OrderBookIDException {
         AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext(SpringConfig.class);
         ((AnnotationConfigApplicationContext)appContext).scan("com.sg.flooringmastery.controller");
         

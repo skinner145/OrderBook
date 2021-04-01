@@ -33,15 +33,16 @@ public class OrderBookView {
         Boolean correctInput = false;
         Integer input = 0;
         while (!correctInput) {
-            System.out.println("<<Orderbook>>");
-            System.out.println("1. View Orderbook");
-            System.out.println("2. Add Buy Order");
-            System.out.println("3. Add Sell Order");
-            System.out.println("4. Display Order Book Stats");
-            System.out.println("5. Manage Orders");
-            System.out.println("6. Exit Program");
+            io.print("<<Orderbook>>");
+            io.print("1. View Orderbook");
+            io.print("2. Add Buy Order");
+            io.print("3. Add Sell Order");
+            io.print("4. Edit Order");
+            io.print("5. Display Order Book Stats");
+            io.print("6. Manage Orders");
+            io.print("7. Exit Program");
             input = inputReader.nextInt();
-            if (checkInput(input, 1, 6)) {
+            if (checkInput(input, 1, 7)) {
                 correctInput = true;
             }
         }
@@ -82,6 +83,28 @@ public class OrderBookView {
         return new BuyOrder(price, quantity);
     }
     
+    public Order editOrderInfo(Order order){
+        io.print("Order price: " + order.getPrice());
+        BigDecimal newPrice = io.readBigDecimal("Please enter the new price for the order", BigDecimal.ZERO);
+        io.print("Order quantity: " + order.getQuantity());
+        int quantity = io.readInt("Please input a new price for the order");
+        
+        Order editedOrder = order;
+        editedOrder.setPrice(newPrice);
+        editedOrder.setQuantity(quantity);
+        
+        io.print(editedOrder.toString());
+        
+        int choice = io.readInt("Would you like to save the edited order? 1. Yes  -  2. No");
+        
+        if(choice == 1){
+            return editedOrder;
+        }else{
+            return order;
+        }
+        
+    }
+    
     public void displayAllTrades(List<Trade> trades){
         io.print("" +trades.size());
         trades.stream().forEach((t) -> io.print(t.toString()));
@@ -91,10 +114,10 @@ public class OrderBookView {
         io.print(trade.toString());
     }
     
-    public String getId(String msg) throws OrderBookTradeException{
+    public String getId(String msg) throws OrderBookIDException{
         String id = io.readString(msg);
         if(id.isBlank()){
-            throw new OrderBookTradeException("ID cannot be blank");
+            throw new OrderBookIDException("ID cannot be blank");
         }
         return id;
     }
