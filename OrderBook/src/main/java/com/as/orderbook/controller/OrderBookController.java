@@ -34,7 +34,7 @@ public class OrderBookController {
     public void run() throws OrderBookOrderException, OrderBookTradeException{
         int input = 0;
         Boolean keepRunning = true;
-        createOrders(1000);
+        createOrders(5);
         while (keepRunning) {
             input = view.printMenuAndGetSelection();
             switch (input) {
