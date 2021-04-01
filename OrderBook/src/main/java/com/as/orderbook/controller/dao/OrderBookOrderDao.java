@@ -13,16 +13,39 @@ import java.util.List;
  * @author Skininho
  */
 public interface OrderBookOrderDao {
-    //add order
+    /**
+     * Adds an order object into the DAO.
+     * @param orderId the ID of the order object to be added
+     * @param order the order object to be added
+     * @return the added order
+     */
     Order addOrder(String orderId, Order order);
-    //get order by ID
+    /**
+     * Gets an individual order based on the ID
+     * @param orderId the ID of the order being fetched
+     * @return the order 
+     */
     Order getOrder(String orderId);
-    //get list of all orders
+    /**
+     * Gets a sorted list of all the orders in the DAO
+     * @return a sorted list of all the orders in the DAO
+     */
     List<Order> getAllOrders();
-    //remove order by ID
+    /**
+     * Removes an individual order based on the ID
+     * @param orderId the ID of the order being removed
+     * @return the order being removed
+     */
     Order removeOrder(String orderId);
-    //edit oreder by ID
+    /**
+     * Edits an order based on the ID
+     * @param orderId the ID of the order being edited
+     * @param editedOrder the order the existing order is being updated to
+     * @return the updated order
+     */
     Order editOrder(String orderId, Order editedOrder);
-    //clear dao lists/maps
+    /**
+     * Removes all orders in the DAO
+     */
     void clearDao();
 }
