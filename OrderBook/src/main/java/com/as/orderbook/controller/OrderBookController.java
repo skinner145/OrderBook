@@ -42,6 +42,9 @@ public class OrderBookController {
                     viewOrders();
                     break;
                 case 2:
+                    System.out.println("Display Stats has not been implemented yet");
+                    break;
+                case 3:
                     input = view.manageOrders();
                     switch(input) {
                         case 1:
@@ -51,7 +54,7 @@ public class OrderBookController {
                             matchAllOrders();
                             break;
                         case 3:
-                            System.out.println("VIEW A TRADE NOT YET IMPLEMENTED");
+                            viewTrade();
                             break;
                         case 4:
                             viewAllTrades();
@@ -63,7 +66,7 @@ public class OrderBookController {
                             break;
                     }
                     break;
-                case 3:
+                case 4:
                     System.out.println("Exiting program...");
                     keepRunning = false;
                     break;
@@ -110,6 +113,18 @@ public class OrderBookController {
             view.displayError(e.getMessage());
         }
     }
+    
+    public void viewTrade() throws OrderBookTradeException{
+        try{
+            String tradeID = view.getId("Please input a Trade ID");
+            Trade trade = service.getTrade(tradeID);
+            view.displayTrade(trade);
+        }catch(OrderBookTradeException e){
+            view.displayError(e.getMessage());
+        }
+        
+    }
+    
     public void viewAllTrades(){
         List<Trade> trades = service.getAllTrades();
         view.displayAllTrades(trades);

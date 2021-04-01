@@ -30,7 +30,7 @@ public interface OrderBookServiceLayer {
     //add trade
     Trade addTrade(String tradeId, Trade trade);
     //get trade by ID
-    Trade getTrade(String tradeId);
+    Trade getTrade(String tradeId) throws OrderBookTradeException;
     //get list of all trades
     List<Trade> getAllTrades();
     //remove Trade by ID

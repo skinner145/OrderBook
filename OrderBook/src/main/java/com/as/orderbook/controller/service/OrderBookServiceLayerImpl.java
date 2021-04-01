@@ -122,8 +122,12 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //get Trade by ID
     @Override
-    public Trade getTrade(String tradeId){
-        return tradeDao.getTrade(tradeId);
+    public Trade getTrade(String tradeId) throws OrderBookTradeException{
+        Trade trade = tradeDao.getTrade(tradeId);
+        if(trade == null){
+            throw new OrderBookTradeException("There's is no matching Trade for ID :" + tradeId);
+        }
+        return trade;
     }
     
     //Get all Trades
