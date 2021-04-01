@@ -58,7 +58,8 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //add's order to map in dao
     @Override
-    public Order addOrder(String orderId, Order newOrder){
+    public Order addOrder(String orderId, Order newOrder) throws OrderBookOrderException{
+        validateObject(newOrder);
         return orderDao.addOrder(orderId, newOrder);
     }
     
@@ -135,19 +136,22 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //remove Order by ID
     @Override
-    public Order removeOrder(String orderId){
+    public Order removeOrder(String orderId) throws OrderBookOrderException{
+        validateObject(orderDao.getOrder(orderId));
         return orderDao.removeOrder(orderId);
     }
     
     //edit Order by ID
     @Override
-    public Order editOrder(String orderId, Order editedOrder){
+    public Order editOrder(String orderId, Order editedOrder) throws OrderBookOrderException{
+        validateObject(editedOrder);
         return orderDao.editOrder(orderId, editedOrder);
     }
     
     //add Trade to map in dao
     @Override
-    public Trade addTrade(String tradeId, Trade trade){
+    public Trade addTrade(String tradeId, Trade trade) throws OrderBookTradeException{
+        validateObject(trade);
         return tradeDao.addTrade(tradeId, trade);
     }
     
@@ -180,13 +184,15 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //remove Trade by ID
     @Override
-    public Trade removeTrade(String tradeId){
+    public Trade removeTrade(String tradeId) throws OrderBookTradeException{
+        validateObject(tradeDao.getTrade(tradeId));
         return tradeDao.removeTrade(tradeId);
     }
     
     //edit Trade by ID
     @Override
-    public Trade editTrade(String tradeId, Trade editedTrade){
+    public Trade editTrade(String tradeId, Trade editedTrade) throws OrderBookTradeException{
+        validateObject(editedTrade);
         return tradeDao.editTrade(tradeId, editedTrade);
     }
     //gets int within range (inclusive)
@@ -299,7 +305,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //matches sell order with buy order
     @Override
-    public Trade matchOrder(List<Order> buyList, List<Order> sellList) throws OrderBookTradeException{
+    public Trade matchOrder(List<Order> buyList, List<Order> sellList) throws OrderBookOrderException, OrderBookTradeException{
         //gets the buy and sell order with the highest price
         Order buy = buyList.get(0);
         Order sell = sellList.get(0);
@@ -335,7 +341,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     }
     
     //method to update orders in dao
-    public void updateAfterMatch(Order buy, Order sell){
+    public void updateAfterMatch(Order buy, Order sell) throws OrderBookOrderException{
         //if buy order quantity = 0
         if(buy.getQuantity() == 0){
             //remove buy order from dao list
