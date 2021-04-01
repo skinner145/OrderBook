@@ -271,10 +271,8 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         validateObject(trade);
         //add trade object in dao
         tradeDao.addTrade(trade.getID(), trade);
-<<<<<<< HEAD
+
         System.out.println(trade.getExecutionTime() + " TIME ");
-=======
->>>>>>> d37fcbdcae01ed91adbfe2d6b19e8f49fcda09f7
         return trade;
     }
     
