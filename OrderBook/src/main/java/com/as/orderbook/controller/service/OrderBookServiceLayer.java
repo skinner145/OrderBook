@@ -144,4 +144,10 @@ public interface OrderBookServiceLayer {
      * @throws OrderBookOrderException if one of the orders is invalid
      */
     void matchAllOrders()throws OrderBookTradeException, OrderBookOrderException;
+    /**
+     * Returns lists of orders sorted by quantity
+     * @return a list consisting of 2 sorted lists of orders (buy orders, sell orders)
+     * @throws OrderBookOrderException if one of the orders is invalid
+     */
+    List<List<Order>> getOrdersByQuantity() throws OrderBookOrderException;
 }

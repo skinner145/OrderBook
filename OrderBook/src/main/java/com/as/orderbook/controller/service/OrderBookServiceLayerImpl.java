@@ -102,6 +102,36 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         return allOrders;
     }
     
+    public List<List<Order>> getOrdersByQuantity() throws OrderBookOrderException{ //Copypaste of getAllOrders but sorted by quantity instead of price
+        List <Order> orders = orderDao.getAllOrders();
+        if(orders.isEmpty()){
+            throw new OrderBookOrderException("There are no orders");
+        }
+        List <Order> buyOrders = new ArrayList<>();
+        List <Order> sellOrders = new ArrayList<>();
+        orders.forEach(order -> {
+            //if order is a buy order add to buyOrders list
+            if(order instanceof BuyOrder){
+                buyOrders.add(order);
+            }
+            //else add it to sellOrders list
+            else{
+                sellOrders.add(order);
+            }
+        });
+        //list that will be returned
+        List<List<Order>> allOrders = new ArrayList<>();
+        //sort lists
+        buyOrders.sort((Order o1, Order o2) -> o2.getQuantity().compareTo(o1.getQuantity()));
+        sellOrders.sort((Order o1, Order o2) -> o2.getQuantity().compareTo(o1.getQuantity()));
+        //add each list to allOrders list
+        allOrders.add(buyOrders);
+        allOrders.add(sellOrders);
+        
+        //return list
+        return allOrders;
+    }
+    
     //remove Order by ID
     @Override
     public Order removeOrder(String orderId){
