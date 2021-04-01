@@ -27,8 +27,8 @@ public class OrderBookDaoTest {
     SellOrder testSellOrder2 = new SellOrder(new BigDecimal("9.9"), 460);
     List<SellOrder> sellOrderList = new ArrayList<>();
     OrderBookTradeDao tradeDao = new OrderBookTradeDaoFileImpl();
-    Trade testTrade1 = new Trade(testBuyOrder1, testSellOrder1, BigDecimal.ONE);
-    Trade testTrade2 = new Trade(testBuyOrder2, testSellOrder2, new BigDecimal("9.9"));
+    Trade testTrade1 = new Trade(testBuyOrder1, testSellOrder1, 120, BigDecimal.ONE);
+    Trade testTrade2 = new Trade(testBuyOrder2, testSellOrder2, 456, new BigDecimal("9.9"));
     List<Trade> tradeList = new ArrayList<>();
     Boolean isCorrect = true;
     

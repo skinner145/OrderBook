@@ -29,14 +29,12 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     OrderBookOrderDao orderDao = new OrderBookOrderDaoFileImpl();
     OrderBookTradeDao tradeDao = new OrderBookTradeDaoFileImpl();
     OrderBookServiceLayer service = new OrderBookServiceLayerImpl(orderDao, tradeDao);
-    BuyOrder testBuyOrder1 = new BuyOrder(BigDecimal.ONE, 123);
-    BuyOrder testBuyOrder2 = new BuyOrder(BigDecimal.TEN, 456);
-    List<BuyOrder> buyOrderList = new ArrayList<>();
-    SellOrder testSellOrder1 = new SellOrder(new BigDecimal("1.1"), 120);
-    SellOrder testSellOrder2 = new SellOrder(new BigDecimal("9.9"), 460);
-    List<SellOrder> sellOrderList = new ArrayList<>();
-    Trade testTrade1 = new Trade(testBuyOrder1, testSellOrder1, BigDecimal.ONE);
-    Trade testTrade2 = new Trade(testBuyOrder2, testSellOrder2, new BigDecimal("9.9"));
+    Order testBuyOrder1 = new BuyOrder(BigDecimal.ONE, 123);
+    Order testBuyOrder2 = new BuyOrder(BigDecimal.TEN, 456);
+    List<Order> buyOrderList = new ArrayList<>();
+    Order testSellOrder1 = new SellOrder(new BigDecimal("1.1"), 120);
+    Order testSellOrder2 = new SellOrder(new BigDecimal("9.9"), 460);
+    List<Order> sellOrderList = new ArrayList<>();
     List<Trade> tradeList = new ArrayList<>();
     
     public OrderBookServiceLayerTest() {
@@ -50,9 +48,6 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         sellOrderList.clear();
         sellOrderList.add(testSellOrder1);
         sellOrderList.add(testSellOrder2);
-        tradeList.clear();
-        tradeList.add(testTrade1);
-        tradeList.add(testTrade2);
     }
 
     @Test
@@ -96,12 +91,12 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         }
         assertTrue(isValid, "Sell quantity is not valid");
         isValid = false;
-        if (service.getBuyQuantity() >= buySize * 20 && service.getBuyQuantity() <= buySize * 20) { //Checking if the sell quantity is within a valid range
+        if (service.getBuyQuantity() >= buySize * 20 && service.getBuyQuantity() <= buySize * 50) { //Checking if the buy quantity is within a valid range
             isValid = true;
         }
         assertTrue(isValid, "Buy quantity is not valid");
         isValid = false;
-        if (service.getAverageSellPrice().compareTo(new BigDecimal(20)) > -1 && service.getAverageSellPrice().compareTo(new BigDecimal(50)) < 1) { //Checking if the average sell price is within a valid range
+        if (service.getAverageSellPrice().compareTo(new BigDecimal(190)) > -1 && service.getAverageSellPrice().compareTo(new BigDecimal(191)) < 1) { //Checking if the average sell price is within a valid range
             isValid = true;
         }
         assertTrue(isValid, "Average sell price is not valid");
