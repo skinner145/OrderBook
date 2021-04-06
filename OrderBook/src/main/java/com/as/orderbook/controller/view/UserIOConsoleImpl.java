@@ -117,4 +117,24 @@ public class UserIOConsoleImpl implements UserIO{
             return false;
         }
     }
+
+    @Override
+    public BigDecimal readBigDecimal(String prompt, BigDecimal min, BigDecimal max) {
+        boolean acceptable = false;
+        BigDecimal price = null;
+        while(!acceptable){
+            String input = readString(prompt);
+            try{
+                price = new BigDecimal(input);
+                if((price.compareTo(min) >= 0) && (price.compareTo(max)  <= 0)){
+                    acceptable = true;
+                }else{
+                    print("Price must be between " + min + " - " + max);
+                }
+            }catch(NumberFormatException e){
+                print("Input must be a number");
+            }
+        }
+        return price;
+    }
 }

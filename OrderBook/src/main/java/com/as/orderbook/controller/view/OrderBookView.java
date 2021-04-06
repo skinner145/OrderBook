@@ -23,7 +23,8 @@ import org.springframework.stereotype.Component;
 
 public class OrderBookView {
     private UserIO io;
-    
+    BigDecimal min = new BigDecimal("190");
+    BigDecimal max = new BigDecimal("191");
     Scanner inputReader = new Scanner(System.in);
     public OrderBookView(UserIO io){
         this.io = io;
@@ -64,13 +65,13 @@ public class OrderBookView {
     }
     
     public Order getNewBuyOrderInfo(){
-        BigDecimal price = io.readBigDecimal("Please input the price of the buy order", BigDecimal.ZERO);
+        BigDecimal price = io.readBigDecimal("Please input the price of the buy order", min, max);
         int quantity = io.readInt("Please input the quantity");
         return new BuyOrder(price, quantity);
     }
     
     public Order getNewSellOrderInfo(){
-        BigDecimal price = io.readBigDecimal("Please input the price of the sell order", BigDecimal.ZERO);
+        BigDecimal price = io.readBigDecimal("Please input the price of the sell order", min, max);
         int quantity = io.readInt("Please input the quantity");
         return new SellOrder(price, quantity);
     }

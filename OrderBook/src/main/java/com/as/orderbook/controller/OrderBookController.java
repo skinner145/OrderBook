@@ -155,8 +155,8 @@ public class OrderBookController {
             Order order = view.getNewBuyOrderInfo();
             System.out.println(order.getID());
             service.addOrder(order.getID(), order);
-        }catch(NumberFormatException e){
-            view.displayError("Price must be a number");
+        }catch(OrderBookOrderException e){
+            view.displayError(e.getMessage());
         }
     }
     
@@ -165,8 +165,8 @@ public class OrderBookController {
             Order order = view.getNewSellOrderInfo();
             System.out.println(order.getID());
             service.addOrder(order.getID(), order);
-        }catch(NumberFormatException e){
-            view.displayError("Price must be a number");
+        }catch(OrderBookOrderException e){
+            view.displayError(e.getMessage());
         }
     }
     
