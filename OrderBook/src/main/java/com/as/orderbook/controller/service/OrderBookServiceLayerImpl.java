@@ -391,14 +391,15 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         if(buy.getQuantity() == 0){
             //remove buy order from dao list
             removeOrder(buy.getID());
-            //update sell order in list
-            editOrder(sell.getID(), sell);
         }
         else{
-            //remove sell order from dao list
-            removeOrder(sell.getID());
-            //update buy order in list
             editOrder(buy.getID(), buy);
+        }
+        if(sell.getQuantity() == 0){
+            removeOrder(sell.getID());
+        }
+        else{
+            editOrder(sell.getID(), sell);
         }
     }
     

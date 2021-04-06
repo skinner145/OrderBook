@@ -38,7 +38,7 @@ public class OrderBookController {
     public void run() throws OrderBookOrderException, OrderBookTradeException, OrderBookIDException{
         int input = 0;
         Boolean keepRunning = true;
-        createOrders(5);
+        createOrders(25);
         
         while (keepRunning) {
             boolean keepShowingOrderMenu = true;
@@ -64,6 +64,7 @@ public class OrderBookController {
                                         break;
                                     case 3:
                                         keepShowingOrders = false;
+                                        page = 1;
                                         break;
                                     default:
                                         view.unknownCommand();

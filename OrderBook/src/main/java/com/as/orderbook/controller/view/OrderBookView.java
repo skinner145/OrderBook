@@ -65,20 +65,9 @@ public class OrderBookView {
     
     
     public Integer tradeMenu(){
-        boolean correctInput = false;
-        Integer input = 0;
-        while(!correctInput){
-            io.print("1. View Trade");
-            io.print("2. View All Trades");
-            io.print("3. Match Order");
-            io.print("4. Match All Orders");
-            io.print("5. Back to Main Menu");
-            input = Integer.parseInt(inputReader.nextLine());
-            if(checkInput(input, 1, 5)){
-                correctInput = true;
-            }
-        }
-        return input;
+        String[] options = {"1. View Trade", "2. View All Trades", "3. Match Order", "4. Match All Orders",
+        "5. Back to Main Menu"};
+        return io.getMenuSelection(options, 1, options.length);
     }
     
     public Integer manageOrders() {

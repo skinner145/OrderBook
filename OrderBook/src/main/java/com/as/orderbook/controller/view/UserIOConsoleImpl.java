@@ -83,4 +83,38 @@ public class UserIOConsoleImpl implements UserIO{
         print(prompt);
         return userInput.nextLine();
     }
+
+    @Override
+    public int getMenuSelection(String[] options, int min, int max) {
+        boolean keepGoing = true;
+        int input = 0;
+        while(keepGoing){
+            print(options);
+            try{
+                input = Integer.parseInt(userInput.nextLine());   
+            }catch(NumberFormatException e){
+                print("Input must be a number between " + min + " - " + max);
+            }
+            if(checkInput(input, min, max)){
+                keepGoing = false;
+            }
+        }
+        return input;
+    }
+
+    @Override
+    public void print(String[] arr) {
+        for (String arr1 : arr) {
+            print(arr1);
+        }
+    }
+    
+    public boolean checkInput(int input, int min, int max){
+        if(input >= min && input <= max){
+            return true;
+        }else{
+            print("Input must be between " + min + " - " + max);
+            return false;
+        }
+    }
 }

@@ -17,9 +17,9 @@ import java.util.List;
  */
 public interface UserIO {
     void print(String msg);
-    
+    void print(String[] arr);
     void printOrderList(List<Order> orders1, List<Order> orders2);
-    
+    int getMenuSelection(String[] options, int min, int max);
     int readInt(String prompt);
     int readInt(String prompt, int min, int max);
     
