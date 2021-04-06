@@ -30,37 +30,15 @@ public class OrderBookView {
     }
     
     public Integer printMenuAndGetSelection() {
-        Boolean correctInput = false;
-        Integer input = 0;
-        while (!correctInput) {
-            io.print("<<Orderbook>>");
-            io.print("1. Order Menu");
-            io.print("2. Trade Menu");
-            io.print("3. Exit Program");;
-            input = Integer.parseInt(inputReader.nextLine());
-            if (checkInput(input, 1, 3)) {
-                correctInput = true;
-            }
-        }
-        return input;
+        io.print("<== OrderBook App ==>");
+        String[] options = {"1. Order Menu", "2. Trade Menu", "3. Exit"};
+        return io.getMenuSelection(options, 1, options.length);
     }
     
     public Integer orderMenu(){
-        boolean correctInput = false;
-        Integer input = 0;
-        while(!correctInput){
-            io.print("1. View OrderBook");
-            io.print("2. Add Buy Order");
-            io.print("3. Add Sell Order");
-            io.print("4. Edit Order");
-            io.print("5. Display OrderBook Stats");
-            io.print("6. Back to Main Menu");
-            input = Integer.parseInt(inputReader.nextLine());
-            if(checkInput(input, 1, 6)){
-                correctInput = true;
-            }
-        }
-        return input;
+        String[] options = {"1. View OrderBook", "2. Add Buy Order", "3. Add Sell Order", "4. Edit Order",
+        "5. Display OrderBook Stats", "6. Return to Main Menu"};
+        return io.getMenuSelection(options, 1, options.length);
     }
     
     
@@ -71,21 +49,8 @@ public class OrderBookView {
     }
     
     public Integer manageOrders() {
-        
-        Boolean correctInput = false;
-        Integer input = 0;
-        while (!correctInput) {
-            System.out.println("1. Match One Order");
-            System.out.println("2. Match All Orders");
-            System.out.println("3. View A Trade");
-            System.out.println("4. View All Trades (Sorted by exection time)");
-            System.out.println("5. Return To Menu");
-            input = Integer.parseInt(inputReader.nextLine());
-            if (checkInput(input, 1, 5)) {
-                correctInput = true;
-            }
-        }
-        return input;
+        String[] options = {"1. Match One Order", "2. Match All Orders", "3. View A Trade", "4. View All Trades (Sorted by exection time)", "5. Return to Main Menu"};
+        return io.getMenuSelection(options, 1, options.length);
     }
     
     public void printString(String s){
@@ -148,18 +113,8 @@ public class OrderBookView {
     }
     
     public int selectPage(){
-        Boolean correctInput = false;
-        Integer input = 0;
-        while (!correctInput) {
-            io.print("1. Previous Page");
-            io.print("2. Next Page");
-            io.print("3. Back to main menu");
-            input = io.readInt("Please select from the above options");
-            if (input > 0 && input < 4) {
-                correctInput = true;
-            }
-        }
-        return input;
+        String[] options = {"1. Previous Page", "2. Next Page", "3 Back to Main Menu"};
+        return io.getMenuSelection(options, 1, options.length);
     }
     
     public void unknownCommand(){

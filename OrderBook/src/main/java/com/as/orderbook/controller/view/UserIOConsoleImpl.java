@@ -92,11 +92,11 @@ public class UserIOConsoleImpl implements UserIO{
             print(options);
             try{
                 input = Integer.parseInt(userInput.nextLine());   
+                if(checkInput(input, min, max)){
+                    keepGoing = false;
+                }
             }catch(NumberFormatException e){
                 print("Input must be a number between " + min + " - " + max);
-            }
-            if(checkInput(input, min, max)){
-                keepGoing = false;
             }
         }
         return input;
