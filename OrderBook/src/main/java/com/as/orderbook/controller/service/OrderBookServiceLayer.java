@@ -86,6 +86,12 @@ public interface OrderBookServiceLayer {
      */
     List<Trade> getAllTrades();
     /**
+     * Returns a list of trades matching a quantity filled sorted by execution time
+     * @param quantity the specified quantity
+     * @return a sorted list of trades matching the quantity
+     */
+    List<Trade> getTradesByQuantity(Integer quantity);
+    /**
      * Wraps the removeTrade method of the DAO
      * @param tradeId the ID of the trade being removed
      * @return the trade being removed
@@ -162,6 +168,13 @@ public interface OrderBookServiceLayer {
     /**
      * Returns lists of orders sorted by quantity
      * @return a list consisting of 2 sorted lists of orders (buy orders, sell orders)
+     * @throws OrderBookOrderException if one of the orders is invalid
+     */
+    List<List<Order>> getAllOrdersByQuantity() throws OrderBookOrderException;
+    /**
+     * Returns lists of orders with a specified quantity sorted by price
+     * @param quantity the specified quantity
+     * @return a list consisting of 2 sorted lists of orders (buy orders, sell orders) matching quantity
      * @throws OrderBookOrderException if one of the orders is invalid
      */
     List<List<Order>> getOrdersByQuantity(Integer quantity) throws OrderBookOrderException;

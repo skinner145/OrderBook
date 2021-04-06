@@ -106,6 +106,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         return allOrders;
     }
     
+    @Override
     public List<List<Order>> getAllOrdersByQuantity() throws OrderBookOrderException{ //Copypaste of getAllOrders but sorted by quantity instead of price
         List <Order> orders = orderDao.getAllOrders();
         if(orders.isEmpty()){
@@ -156,6 +157,10 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         });
         //list that will be returned
         List<List<Order>> allOrders = new ArrayList<>();
+        //sort lists
+        buyOrders.sort((Order o1, Order o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        sellOrders.sort((Order o1, Order o2) -> o2.getPrice().compareTo(o1.getPrice()));
+        //add each list to allOrders list
         allOrders.add(buyOrders);
         allOrders.add(sellOrders);
         
@@ -207,6 +212,13 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     @Override
     public List<Trade> getAllTrades() {
         List<Trade> trades = tradeDao.getAllTrades();
+        trades.sort((Trade t1, Trade t2) -> t2.getExecutionTime().compareTo(t1.getExecutionTime()));
+        return trades;
+    }
+    
+    @Override
+    public List<Trade> getTradesByQuantity(Integer quantity) {
+        List<Trade> trades = tradeDao.getAllTrades().stream().filter(i -> Objects.equals(i.getQuantityFilled(), quantity)).collect(Collectors.toList());
         trades.sort((Trade t1, Trade t2) -> t2.getExecutionTime().compareTo(t1.getExecutionTime()));
         return trades;
     }
