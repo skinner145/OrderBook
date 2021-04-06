@@ -211,6 +211,10 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         return trades;
     }
     
+    public List<Trade> getTradesByQuantity(Integer quantity) {
+        return tradeDao.getAllTrades().stream().filter(i -> Objects.equals(i.getQuantityFilled(), quantity)).collect(Collectors.toList());
+    }
+    
     //remove Trade by ID
     @Override
     public Trade removeTrade(String tradeId) throws OrderBookTradeException{
