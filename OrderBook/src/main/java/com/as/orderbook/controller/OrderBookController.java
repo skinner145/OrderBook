@@ -38,7 +38,7 @@ public class OrderBookController {
     public void run() throws OrderBookOrderException, OrderBookTradeException, OrderBookIDException{
         int input = 0;
         Boolean keepRunning = true;
-        createOrders(25);
+        createOrders(5);
         
         while (keepRunning) {
             boolean keepShowingOrderMenu = true;

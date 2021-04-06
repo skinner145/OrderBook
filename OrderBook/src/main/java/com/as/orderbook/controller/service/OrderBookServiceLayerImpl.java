@@ -51,8 +51,8 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
                     getRandomNum(20, 50));
             Order sellOrder = new SellOrder(new BigDecimal(getRandomNum(190)),
                     getRandomNum(20, 50));
-            validateObject(buyOrder);
-            validateObject(sellOrder);
+            validateOrder(buyOrder);
+            validateOrder(sellOrder);
             orderDao.addOrder(buyOrder.getID(), buyOrder);
             orderDao.addOrder(sellOrder.getID(), sellOrder);
         }
@@ -61,7 +61,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //add's order to map in dao
     @Override
     public Order addOrder(String orderId, Order newOrder) throws OrderBookOrderException{
-        validateObject(newOrder);
+        validateOrder(newOrder);
         return orderDao.addOrder(orderId, newOrder);
     }
     
@@ -171,21 +171,20 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //remove Order by ID
     @Override
     public Order removeOrder(String orderId) throws OrderBookOrderException{
-        validateObject(orderDao.getOrder(orderId));
         return orderDao.removeOrder(orderId);
     }
     
     //edit Order by ID
     @Override
     public Order editOrder(String orderId, Order editedOrder) throws OrderBookOrderException{
-        validateObject(editedOrder);
+        validateOrder(editedOrder);
         return orderDao.editOrder(orderId, editedOrder);
     }
     
     //add Trade to map in dao
     @Override
     public Trade addTrade(String tradeId, Trade trade) throws OrderBookTradeException{
-        validateObject(trade);
+        validateTrade(trade);
         return tradeDao.addTrade(tradeId, trade);
     }
     
@@ -226,14 +225,13 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //remove Trade by ID
     @Override
     public Trade removeTrade(String tradeId) throws OrderBookTradeException{
-        validateObject(tradeDao.getTrade(tradeId));
         return tradeDao.removeTrade(tradeId);
     }
     
     //edit Trade by ID
     @Override
     public Trade editTrade(String tradeId, Trade editedTrade) throws OrderBookTradeException{
-        validateObject(editedTrade);
+        validateTrade(editedTrade);
         return tradeDao.editTrade(tradeId, editedTrade);
     }
     //gets int within range (inclusive)
@@ -364,7 +362,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         //create trade object
         Trade trade = new Trade(buy, sell, quantity, price);
         System.out.println("quantity" + trade.getQuantityFilled());
-        validateObject(trade);
+        System.out.println("1");
+        validateTrade(trade);
+        System.out.println("2");
         //add trade object in dao
         tradeDao.addTrade(trade.getID(), trade);
 
@@ -408,7 +408,8 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         }
     }
     
-    public void validateObject(Order order) throws OrderBookOrderException{
+    public void validateOrder(Order order) throws OrderBookOrderException{
+        System.out.println(order.toString());
         if(order.getID().isBlank()){
             throw new OrderBookOrderException("Order ID cannot be blank");
         }
@@ -420,7 +421,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         }
     }
     
-    public void validateObject(Trade trade) throws OrderBookTradeException{
+    public void validateTrade(Trade trade) throws OrderBookTradeException{
         System.out.println(trade.toString());
         if(trade.getID().isBlank()){
             throw new OrderBookTradeException("Trade ID cannot be blank");
@@ -428,9 +429,9 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         if(trade.getExecutedPrice().compareTo(BigDecimal.ZERO) != 1){
             throw new OrderBookTradeException("Execution price must be greater than 0");
         }
-//        if(trade.getQuantityFilled() <=0 ){
-//            throw new OrderBookTradeException("Quantity filled must be greater than 0");
-//        }
+        if(trade.getQuantityFilled() <=0 ){
+            throw new OrderBookTradeException("Quantity filled must be greater than 0");
+        }
         if(trade.getExecutionTime() == 0.0d){
             throw new OrderBookTradeException("Execution Time cannot be null");
         }
