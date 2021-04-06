@@ -178,6 +178,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //edit Order by ID
     @Override
     public Order editOrder(String orderId, Order editedOrder) throws OrderBookOrderException{
+        System.out.println("service: " + editedOrder.toString());
         validateOrder(editedOrder);
         return orderDao.editOrder(orderId, editedOrder);
     }

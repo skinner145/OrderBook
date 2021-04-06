@@ -127,20 +127,13 @@ public class OrderBookView {
         io.print("Order quantity: " + order.getQuantity());
         int quantity = io.readInt("Please input a new quantity for the order");
         
-        Order editedOrder = order;
-        editedOrder.setPrice(newPrice);
-        editedOrder.setQuantity(quantity);
-        
-        io.print(editedOrder.toString());
-        
         int choice = io.readInt("Would you like to save the edited order? 1. Yes  -  2. No");
         
         if(choice == 1){
-            return editedOrder;
-        }else{
-            return order;
+            order.setPrice(newPrice);
+            order.setQuantity(quantity);
         }
-        
+        return order;
     }
     
     public void displayAllTrades(List<Trade> trades){

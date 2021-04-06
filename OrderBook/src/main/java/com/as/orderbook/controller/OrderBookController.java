@@ -173,8 +173,10 @@ public class OrderBookController {
         try{
             String orderID = view.getId("Please input the ID of the order you wish to edit");
             Order order = service.getOrder(orderID);
-            order = view.editOrderInfo(order);
-            service.editOrder(order.getID(), order);
+            System.out.println(order.toString());
+            Order editedOrder = view.editOrderInfo(order);
+            System.out.println(editedOrder.toString());
+            service.editOrder(editedOrder.getID(), editedOrder);
         }catch(OrderBookIDException | OrderBookOrderException e){
             view.displayError(e.getMessage());
         }

@@ -50,7 +50,12 @@ public class OrderBookOrderDaoFileImpl implements OrderBookOrderDao{
     //replaces the order with matching orderID with editedOrder object
     @Override
     public Order editOrder(String orderId, Order editedOrder){
-        return orders.replace(orderId, editedOrder);
+        System.out.println(orders.size());
+        System.out.println("DAO: " + editedOrder.toString());
+        System.out.println(orders.get(orderId));
+        orders.replace(orderId, editedOrder);
+        System.out.println(orders.get(orderId));
+        return editedOrder;
     }
 
     //clears map
