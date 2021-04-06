@@ -56,8 +56,8 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         service.createOrders(10);
         Boolean isSorted = true;
         int i = 0;
-        List<Order> buyOrderList = service.getAllOrders().get(0);
-        List<Order> sellOrderList = service.getAllOrders().get(1);
+        List<Order> buyOrderList = service.getAllOrdersByPrice().get(0);
+        List<Order> sellOrderList = service.getAllOrdersByPrice().get(1);
         
         for (i = 1; i < buyOrderList.size(); i++) {
             if (buyOrderList.get(i).getPrice().compareTo(buyOrderList.get(i - 1).getPrice()) == 1) {
@@ -82,8 +82,8 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
         service.clearService();
         service.createOrders(10);
         Boolean isValid = false;
-        int buySize = service.getAllOrders().get(0).size();
-        int sellSize = service.getAllOrders().get(1).size();
+        int buySize = service.getAllOrdersByPrice().get(0).size();
+        int sellSize = service.getAllOrdersByPrice().get(1).size();
         assertEquals(buySize, service.getNumOfBuyOrders(), "Didn't create 10 buy orders");
         assertEquals(sellSize, service.getNumOfSellOrders(), "Didn't create 10 sell orders");
         if (service.getSellQuantity() >= sellSize * 20 && service.getSellQuantity() <= sellSize * 50) { //Checking if the sell quantity is within a valid range
@@ -111,7 +111,7 @@ public class OrderBookServiceLayerTest { //Fairly minimal, as majority of method
     public void testMatchOrder() throws OrderBookOrderException, OrderBookTradeException {
         service.clearService();
         service.createOrders(10);
-        List<List<Order>> orderList = service.getAllOrders();
+        List<List<Order>> orderList = service.getAllOrdersByPrice();
         Trade tradeMatch = service.matchOrder(orderList.get(0), orderList.get(1));
         System.out.println("trade id: " + tradeMatch.getID());
         assertTrue(tradeMatch.getID().matches("TRADE\\d+.*"), "Trade id doesn't match format");

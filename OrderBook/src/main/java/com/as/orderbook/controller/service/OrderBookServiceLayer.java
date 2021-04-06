@@ -164,5 +164,5 @@ public interface OrderBookServiceLayer {
      * @return a list consisting of 2 sorted lists of orders (buy orders, sell orders)
      * @throws OrderBookOrderException if one of the orders is invalid
      */
-    List<List<Order>> getOrdersByQuantity() throws OrderBookOrderException;
+    List<List<Order>> getOrdersByQuantity(Integer quantity) throws OrderBookOrderException;
 }

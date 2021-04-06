@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -135,8 +136,31 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         return allOrders;
     }
     
-    public List<Order> getOrdersByQuantity(Integer quantity) {
-        return orderDao.getAllOrders().stream().filter(i -> i.getQuantity() == quantity).collect(Collectors.toList());
+    @Override
+    public List<List<Order>> getOrdersByQuantity(Integer quantity) throws OrderBookOrderException{
+        List <Order> orders = orderDao.getAllOrders().stream().filter(i -> Objects.equals(i.getQuantity(), quantity)).collect(Collectors.toList());
+        if(orders.isEmpty()){
+            throw new OrderBookOrderException("There are no orders");
+        }
+        List <Order> buyOrders = new ArrayList<>();
+        List <Order> sellOrders = new ArrayList<>();
+        orders.forEach(order -> {
+            //if order is a buy order add to buyOrders list
+            if(order instanceof BuyOrder){
+                buyOrders.add(order);
+            }
+            //else add it to sellOrders list
+            else{
+                sellOrders.add(order);
+            }
+        });
+        //list that will be returned
+        List<List<Order>> allOrders = new ArrayList<>();
+        allOrders.add(buyOrders);
+        allOrders.add(sellOrders);
+        
+        //return list
+        return allOrders;
     }
     
     //remove Order by ID
@@ -339,7 +363,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     @Override
     public void matchAllOrders() throws OrderBookTradeException, OrderBookOrderException{
         while(!checkIfEmpty()){
-            List<List<Order>> orderList = getAllOrders();
+            List<List<Order>> orderList = getAllOrdersByPrice();
             //match order method
             matchOrder(orderList.get(0), orderList.get(1));
         }
