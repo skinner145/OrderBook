@@ -35,7 +35,7 @@ public class UserIOConsoleImpl implements UserIO{
 
     @Override
     public void printOrderList(List<Order> orders1, List<Order> orders2) {
-        print("BUY ORDERS" + "            ---            " + "SELL ORDERS");
+        print("                                          BUY ORDERS" + "                       ---                       " + "SELL ORDERS");
         int length = Math.max(orders1.size(), orders2.size());
         for(int i = 0; i < length; i++){
             String output = "";

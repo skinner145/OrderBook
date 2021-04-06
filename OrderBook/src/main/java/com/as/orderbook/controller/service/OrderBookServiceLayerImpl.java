@@ -79,7 +79,6 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     @Override
     public List<List<Order>> getAllOrdersByPrice() throws OrderBookOrderException{
         List <Order> orders = orderDao.getAllOrders();
-        System.out.println("The size is " + orders.size());
         if(orders.isEmpty()){
             throw new OrderBookOrderException("There are no orders");
         }
@@ -179,7 +178,6 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //edit Order by ID
     @Override
     public Order editOrder(String orderId, Order editedOrder) throws OrderBookOrderException{
-        System.out.println("service: " + editedOrder.toString());
         validateOrder(editedOrder);
         return orderDao.editOrder(orderId, editedOrder);
     }

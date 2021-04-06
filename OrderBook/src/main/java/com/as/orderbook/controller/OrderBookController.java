@@ -31,6 +31,8 @@ public class OrderBookController {
     int orderLastPage = 0;
     int tradePage = 1;
     int tradeLastPage = 0;
+    boolean keepShowingTrades = true;
+    boolean keepShowingOrders = true;
     
     public OrderBookController(OrderBookView view, OrderBookServiceLayer service) {
         this.view = view;
@@ -53,9 +55,12 @@ public class OrderBookController {
                         input = view.orderMenu();
                         switch(input){
                             case 1:
-                                boolean keepShowingOrders = true;
+                                keepShowingOrders = true;
                                 while(keepShowingOrders){
                                     viewOrders();
+                                    if(!keepShowingOrders){
+                                        break;
+                                    }
                                     input = view.selectPage();
                                     switch(input){
                                     case 1:
@@ -101,9 +106,12 @@ public class OrderBookController {
                                 viewTrade();
                                 break;
                             case 2:
-                                boolean keepShowingTrades = true;
+                                keepShowingTrades = true;
                                 while(keepShowingTrades){
                                     viewAllTrades();
+                                    if(!keepShowingTrades){
+                                        break;
+                                    }
                                     input = view.selectPage();
                                     switch(input){
                                     case 1:
@@ -134,7 +142,7 @@ public class OrderBookController {
                     }
                     break;
                 case 3:
-                    System.out.println("Exiting program...");
+                    view.exitMessage();
                     keepRunning = false;
                     break;
                 default:
@@ -155,6 +163,10 @@ public class OrderBookController {
         try{
             List<List<Order>> allOrders = service.getAllOrdersByPrice();
             allOrders = getCurrentOrders(allOrders);
+            if(allOrders.get(0).size() < 1 && allOrders.get(1).size() < 1){
+                keepShowingOrders = false;
+            }
+            view.pageNumber(orderPage);
             view.displayOrders(allOrders);
         }catch(OrderBookOrderException e){
             view.displayError(e.getMessage());
@@ -174,7 +186,6 @@ public class OrderBookController {
     public void addBuyOrder() throws OrderBookOrderException{
         try{
             Order order = view.getNewBuyOrderInfo();
-            System.out.println(order.getID());
             service.addOrder(order.getID(), order);
         }catch(OrderBookOrderException e){
             view.displayError(e.getMessage());
@@ -184,7 +195,6 @@ public class OrderBookController {
     public void addSellOrder() throws OrderBookOrderException{
         try{
             Order order = view.getNewSellOrderInfo();
-            System.out.println(order.getID());
             service.addOrder(order.getID(), order);
         }catch(OrderBookOrderException e){
             view.displayError(e.getMessage());
@@ -195,9 +205,7 @@ public class OrderBookController {
         try{
             String orderID = view.getId("Please input the ID of the order you wish to edit");
             Order order = service.getOrder(orderID);
-            System.out.println(order.toString());
             Order editedOrder = view.editOrderInfo(order);
-            System.out.println(editedOrder.toString());
             service.editOrder(editedOrder.getID(), editedOrder);
         }catch(OrderBookIDException | OrderBookOrderException e){
             view.displayError(e.getMessage());
@@ -208,7 +216,6 @@ public class OrderBookController {
         try{
             List<List<Order>> allOrders = service.getAllOrdersByPrice();
             Trade matchedOrder = service.matchOrder(allOrders.get(0), allOrders.get(1));
-            System.out.println(matchedOrder.getExecutionTime());
             view.displayTrade(matchedOrder);
         }catch(OrderBookTradeException | OrderBookOrderException e){
             view.displayError(e.getMessage());
@@ -217,6 +224,7 @@ public class OrderBookController {
     public void matchAllOrders() throws OrderBookTradeException, OrderBookOrderException{
         try{
             service.matchAllOrders();
+            view.allOrdersMatched();
         }catch(OrderBookTradeException | OrderBookOrderException e){
             view.displayError(e.getMessage());
         }catch(IndexOutOfBoundsException e){
@@ -239,9 +247,11 @@ public class OrderBookController {
         try{
             List<Trade> trades = service.getAllTrades();
             trades = getCurrentTrades(trades);
+            view.pageNumber(tradePage);
             view.displayAllTrades(trades);
         }catch(OrderBookTradeException e){
             view.displayError(e.getMessage());
+            keepShowingTrades = false;
         }
     }
     

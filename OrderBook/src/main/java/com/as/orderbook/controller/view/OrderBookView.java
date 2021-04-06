@@ -104,16 +104,27 @@ public class OrderBookView {
     }
     
     public void displayError(String s){
-        io.print("===Error===");
+        io.print("<== Error ==>");
         io.print(s);
     }
     
     public int selectPage(){
-        String[] options = {"1. Previous Page", "2. Next Page", "3 Back to Main Menu"};
+        String[] options = {"1. Previous Page", "2. Next Page", "3. Back to Main Menu"};
         return io.getMenuSelection(options, 1, options.length);
     }
     
     public void unknownCommand(){
         io.print("Unknown Command");
+    }
+    
+    public void exitMessage(){
+        io.print("Exiting...");
+    }
+    
+    public void allOrdersMatched(){
+        io.print("<== All Orders Matched Successfully ==>");
+    }
+    public void pageNumber(int page){
+        io.print("<== Page Number " + page + " ==>");
     }
 }
