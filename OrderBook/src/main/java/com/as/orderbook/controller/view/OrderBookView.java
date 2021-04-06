@@ -66,33 +66,28 @@ public class OrderBookView {
     
     public Order getNewBuyOrderInfo(){
         BigDecimal price = io.readBigDecimal("Please input the price of the buy order", min, max);
-        int quantity = io.readInt("Please input the quantity");
+        int quantity = io.readInt("Please input the quantity", 1);
         return new BuyOrder(price, quantity);
     }
     
     public Order getNewSellOrderInfo(){
         BigDecimal price = io.readBigDecimal("Please input the price of the sell order", min, max);
-        int quantity = io.readInt("Please input the quantity");
+        int quantity = io.readInt("Please input the quantity", 1);
         return new SellOrder(price, quantity);
     }
     
     public Order editOrderInfo(Order order){
-        io.print("Order price: " + order.getPrice());
-        BigDecimal newPrice = io.readBigDecimal("Please enter the new price for the order", BigDecimal.ZERO);
-        io.print("Order quantity: " + order.getQuantity());
-        int quantity = io.readInt("Please input a new quantity for the order");
-        
-        int choice = io.readInt("Would you like to save the edited order? 1. Yes  -  2. No");
-        
+        BigDecimal newPrice = io.readBigDecimal("Please enter the new price for the order", min, max);
+        int newQuantity = io.readInt("Please input a new quantity for the order", 1);
+        int choice = io.readInt("Would you like to save the edited order? 1. Yes  -  2. No", 1, 2);
         if(choice == 1){
             order.setPrice(newPrice);
-            order.setQuantity(quantity);
+            order.setQuantity(newQuantity);
         }
         return order;
     }
     
     public void displayAllTrades(List<Trade> trades){
-        io.print("" +trades.size());
         trades.stream().forEach((t) -> io.print(t.toString()));
     }
     
@@ -120,13 +115,5 @@ public class OrderBookView {
     
     public void unknownCommand(){
         io.print("Unknown Command");
-    }
-    
-    public boolean checkInput(int input, int min, int max){
-        if(input >= min && input <= max){
-            return true;
-        }else{
-            return false;
-        }
     }
 }

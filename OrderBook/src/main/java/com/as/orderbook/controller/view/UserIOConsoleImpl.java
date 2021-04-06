@@ -25,10 +25,17 @@ public class UserIOConsoleImpl implements UserIO{
     public void print(String msg) {
         System.out.println(msg);
     }
+    
+    @Override
+    public void print(String[] arr) {
+        for (String arr1 : arr) {
+            print(arr1);
+        }
+    }
 
     @Override
     public void printOrderList(List<Order> orders1, List<Order> orders2) {
-        print(orders1.size() + "   " + orders2.size());
+        print("BUY ORDERS" + "            ---            " + "SELL ORDERS");
         int length = Math.max(orders1.size(), orders2.size());
         for(int i = 0; i < length; i++){
             String output = "";
@@ -48,19 +55,44 @@ public class UserIOConsoleImpl implements UserIO{
     }
 
     @Override
-    public int readInt(String prompt){
+    public int readInt(String prompt, int min){
+        int input = 0;
+        boolean acceptable = false;
         print(prompt);
-        return Integer.parseInt(userInput.nextLine());
+        while(!acceptable){
+            try{   
+                input = Integer.parseInt(userInput.nextLine());
+                if(input >= min){
+                    acceptable = true;
+                }else{
+                    numberError(min);
+                }
+            }catch(NumberFormatException e){
+                print("Input must be a number");
+            }
+        }
+        return input;
     }
     
     @Override
-    public int readInt(String prompt, int min, int max) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public BigDecimal readBigDecimal(String prompt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int readInt(String prompt, int min, int max){
+        int input = 0;
+        boolean acceptable = false;
+        print(prompt);
+        while(!acceptable){
+            try{   
+                input = Integer.parseInt(userInput.nextLine());
+                if(input >= min && input <= max){
+                    acceptable = true;
+                }
+                else{
+                    numberError(min, max);
+                }
+            }catch(NumberFormatException e){
+                print("Input must be a number");
+            }
+        }
+        return input;
     }
 
     @Override
@@ -71,11 +103,6 @@ public class UserIOConsoleImpl implements UserIO{
             price = new BigDecimal(userInput.nextLine());   
         }
         return price;
-    }
-    
-    @Override
-    public LocalDateTime readDate(String prompt){
-        throw new UnsupportedOperationException("Not supported yet");
     }
 
     @Override
@@ -96,24 +123,17 @@ public class UserIOConsoleImpl implements UserIO{
                     keepGoing = false;
                 }
             }catch(NumberFormatException e){
-                print("Input must be a number between " + min + " - " + max);
+                numberError(min, max);
             }
         }
         return input;
-    }
-
-    @Override
-    public void print(String[] arr) {
-        for (String arr1 : arr) {
-            print(arr1);
-        }
     }
     
     public boolean checkInput(int input, int min, int max){
         if(input >= min && input <= max){
             return true;
         }else{
-            print("Input must be between " + min + " - " + max);
+            numberError(min, max);
             return false;
         }
     }
@@ -129,12 +149,19 @@ public class UserIOConsoleImpl implements UserIO{
                 if((price.compareTo(min) >= 0) && (price.compareTo(max)  <= 0)){
                     acceptable = true;
                 }else{
-                    print("Price must be between " + min + " - " + max);
+                    numberError(min.intValue(), max.intValue());
                 }
             }catch(NumberFormatException e){
                 print("Input must be a number");
             }
         }
         return price;
+    }
+    
+    public void numberError(int min){
+        print("Input must be at least " + min);
+    }
+    public void numberError(int min, int max){
+        print("Input must be between " + min + " - " + max);
     }
 }

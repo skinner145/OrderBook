@@ -84,7 +84,7 @@ public interface OrderBookServiceLayer {
      * Returns a list of trades sorted by execution time
      * @return a sorted list of trades
      */
-    List<Trade> getAllTrades();
+    List<Trade> getAllTrades() throws OrderBookTradeException ;
     /**
      * Returns a list of trades matching a quantity filled sorted by execution time
      * @param quantity the specified quantity
@@ -140,7 +140,7 @@ public interface OrderBookServiceLayer {
      * Converts getNumOfSellOrders, getNumOfBuyOrders, getSellQuantity, getBuyQuantity, getAverageSellPrice, getAverageBuyPrice into one string
      * @return string showing various stats about the DAO
      */
-    String displayStats();
+    String displayStats() throws OrderBookOrderException;
     /**
      * Wraps the clearDao methods
      */

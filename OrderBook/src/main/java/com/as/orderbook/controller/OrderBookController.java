@@ -26,9 +26,11 @@ import org.springframework.stereotype.Component;
 public class OrderBookController {
     private OrderBookView view;
     private OrderBookServiceLayer service;
-    int page = 1;
+    int orderPage = 1;
     int itemsPerPage = 10;
-    int lastPage = 0;
+    int orderLastPage = 0;
+    int tradePage = 1;
+    int tradeLastPage = 0;
     
     public OrderBookController(OrderBookView view, OrderBookServiceLayer service) {
         this.view = view;
@@ -57,14 +59,14 @@ public class OrderBookController {
                                     input = view.selectPage();
                                     switch(input){
                                     case 1:
-                                        changePage(PageChoices.PREVIOUS);
+                                        changeOrderPage(PageChoices.PREVIOUS);
                                         break;
                                     case 2:
-                                        changePage(PageChoices.NEXT);
+                                        changeOrderPage(PageChoices.NEXT);
                                         break;
                                     case 3:
                                         keepShowingOrders = false;
-                                        page = 1;
+                                        orderPage = 1;
                                         break;
                                     default:
                                         view.unknownCommand();
@@ -99,7 +101,25 @@ public class OrderBookController {
                                 viewTrade();
                                 break;
                             case 2:
-                                viewAllTrades();
+                                boolean keepShowingTrades = true;
+                                while(keepShowingTrades){
+                                    viewAllTrades();
+                                    input = view.selectPage();
+                                    switch(input){
+                                    case 1:
+                                        changeTradePage(PageChoices.PREVIOUS);
+                                        break;
+                                    case 2:
+                                        changeTradePage(PageChoices.NEXT);
+                                        break;
+                                    case 3:
+                                        keepShowingTrades = false;
+                                        tradePage = 1;
+                                        break;
+                                    default:
+                                        view.unknownCommand();
+                                    }
+                                }
                                 break;
                             case 3:
                                 matchOrder();
@@ -134,9 +154,6 @@ public class OrderBookController {
     public void viewOrders()throws OrderBookOrderException{
         try{
             List<List<Order>> allOrders = service.getAllOrdersByPrice();
-            System.out.println("all orders" + allOrders.size());
-            System.out.println("buy orders" + allOrders.get(0).size());
-            System.out.println("sell orders" + allOrders.get(1).size());
             allOrders = getCurrentOrders(allOrders);
             view.displayOrders(allOrders);
         }catch(OrderBookOrderException e){
@@ -145,9 +162,13 @@ public class OrderBookController {
         
     }
     
-    public void displayStats(){
-        String stats = service.displayStats();
-        view.printString(stats);
+    public void displayStats() throws OrderBookOrderException{
+        try{
+            String stats = service.displayStats();
+            view.printString(stats);
+        }catch(OrderBookOrderException e){
+            view.displayError(e.getMessage());
+        }
     }
     
     public void addBuyOrder() throws OrderBookOrderException{
@@ -214,41 +235,65 @@ public class OrderBookController {
         
     }
     
-    public void viewAllTrades(){
-        List<Trade> trades = service.getAllTrades();
-        view.displayAllTrades(trades);
+    public void viewAllTrades()throws OrderBookTradeException {
+        try{
+            List<Trade> trades = service.getAllTrades();
+            trades = getCurrentTrades(trades);
+            view.displayAllTrades(trades);
+        }catch(OrderBookTradeException e){
+            view.displayError(e.getMessage());
+        }
     }
     
     public List<List<Order>> getCurrentOrders(List<List<Order>> allOrders){
-        int lastItem1 = itemsPerPage * page;
-        int lastItem2 = itemsPerPage * page;
-        int firstItem = lastItem1 - itemsPerPage;
-        getLastPage(allOrders);
+        int lastOrder1 = itemsPerPage * orderPage;
+        int lastOrder2 = itemsPerPage * orderPage;
+        int firstOrder = lastOrder1 - itemsPerPage;
+        getOrderLastPage(allOrders);
         
-        if(page == lastPage){
-            lastItem1 = firstItem + (service.getNumOfBuyOrders() % itemsPerPage);
-            lastItem2 = firstItem + (service.getNumOfSellOrders()% itemsPerPage);
+        if(orderPage == orderLastPage){
+            lastOrder1 = firstOrder + (service.getNumOfBuyOrders() % itemsPerPage);
+            lastOrder2 = firstOrder + (service.getNumOfSellOrders()% itemsPerPage);
         }
-        List currentBuyOrders = allOrders.get(0).subList(firstItem, lastItem1);
-        List currentSellOrders = allOrders.get(1).subList(firstItem, lastItem2);
+        List currentBuyOrders = allOrders.get(0).subList(firstOrder, lastOrder1);
+        List currentSellOrders = allOrders.get(1).subList(firstOrder, lastOrder2);
         allOrders.clear();
         allOrders.add(currentBuyOrders);
         allOrders.add(currentSellOrders);
         return allOrders;
     }
     
-    public void changePage(PageChoices choice){
-        if(choice == PageChoices.PREVIOUS && page > 1){
-            page -= 1;
-        }else if(choice == PageChoices.NEXT && page < lastPage){
-            page += 1;
+    public List<Trade> getCurrentTrades(List<Trade> trades){
+        int lastTrade = itemsPerPage * tradePage;
+        int firstTrade = lastTrade - itemsPerPage;
+        getTradeLastPage(trades);
+        if(tradePage == tradeLastPage){
+            lastTrade = firstTrade + (trades.size() % itemsPerPage);
+        }
+        return trades.subList(firstTrade, lastTrade);
+    }
+    
+    public void changeOrderPage(PageChoices choice){
+        if(choice == PageChoices.PREVIOUS && orderPage > 1){
+            orderPage -= 1;
+        }else if(choice == PageChoices.NEXT && orderPage < orderLastPage){
+            orderPage += 1;
         }
     }
     
-    public void getLastPage(List<List<Order>> orders){
+    public void changeTradePage(PageChoices choice){
+        if(choice == PageChoices.PREVIOUS && tradePage > 1){
+            tradePage -= 1;
+        }else if(choice == PageChoices.NEXT && tradePage < tradeLastPage){
+            tradePage += 1;
+        }
+    }
+    
+    public void getOrderLastPage(List<List<Order>> orders){
         int length = Math.max(orders.get(0).size(), orders.get(1).size());
-        System.out.println(length);
-        lastPage = (int) Math.ceil((double)length/(double)itemsPerPage);
-        System.out.println(lastPage);
+        orderLastPage = (int) Math.ceil((double)length/(double)itemsPerPage);
+    }
+    public void getTradeLastPage(List<Trade> trades){
+        tradeLastPage = (int) Math.ceil((double)trades.size()/(double)itemsPerPage);
     }
 }

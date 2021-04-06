@@ -20,12 +20,9 @@ public interface UserIO {
     void print(String[] arr);
     void printOrderList(List<Order> orders1, List<Order> orders2);
     int getMenuSelection(String[] options, int min, int max);
-    int readInt(String prompt);
+    int readInt(String prompt, int min);
     int readInt(String prompt, int min, int max);
-    
-    BigDecimal readBigDecimal(String prompt);
     BigDecimal readBigDecimal(String prompt, BigDecimal min);
     BigDecimal readBigDecimal(String prompt, BigDecimal min, BigDecimal max);
-    LocalDateTime readDate(String prompt);
     String readString(String prompt);
 }

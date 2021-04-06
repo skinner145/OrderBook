@@ -12,6 +12,7 @@ import com.as.orderbook.dto.Order;
 import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -195,7 +196,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     public Trade getTrade(String tradeId) throws OrderBookTradeException{
         Trade trade = tradeDao.getTrade(tradeId);
         if(trade == null){
-            throw new OrderBookTradeException("There's is no matching Trade for ID :" + tradeId);
+            throw new OrderBookTradeException("There's is no matching Trade for ID: " + tradeId);
         }
         return trade;
     }
@@ -204,15 +205,18 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     public Trade getTrade(LocalDateTime dateTime) throws OrderBookTradeException {
         Trade trade = tradeDao.getTrade(dateTime);
         if(trade == null){
-            throw new OrderBookTradeException("There's is no matching Trade for date :" + dateTime);
+            throw new OrderBookTradeException("There's is no matching Trade for date: " + dateTime);
         }
         return trade;
     }
     
     //Get all Trades
     @Override
-    public List<Trade> getAllTrades() {
+    public List<Trade> getAllTrades() throws OrderBookTradeException {
         List<Trade> trades = tradeDao.getAllTrades();
+        if(trades.size() < 1){
+            throw new OrderBookTradeException("There are no trades");
+        }
         trades.sort((Trade t1, Trade t2) -> t2.getExecutionTime().compareTo(t1.getExecutionTime()));
         return trades;
     }
@@ -303,7 +307,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
                 price = price.add(order.getPrice());
             }
         });
-        return price.divide(new BigDecimal(getNumOfSellOrders()));
+        return price.divide(new BigDecimal(getNumOfSellOrders()), 2, RoundingMode.HALF_UP);
     }
 
     //adds all buy prices together then divide by number of buy orders
@@ -315,18 +319,21 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
                 price = price.add(order.getPrice());
             }
         });
-        return price.divide(new BigDecimal(getNumOfBuyOrders()));
+        return price.divide(new BigDecimal(getNumOfBuyOrders()), 2, RoundingMode.HALF_UP);
     }
     
     //returns String of previous 6 method returns
     @Override
-    public String displayStats(){
+    public String displayStats() throws OrderBookOrderException{
+        if(checkIfEmpty()){
+            throw new OrderBookOrderException("Order book is empty");
+        }
         return "Number of Sell Orders: " + getNumOfSellOrders() + 
-                " - Number of Buy Orders: " + getNumOfBuyOrders() +
-                " - Overall Sell Quantity: " + getSellQuantity() + 
-                " - Overall Buy Quantity: " + getBuyQuantity() + 
-                " - Average Sale Price: " + getAverageSellPrice() +
-                " - Average Buy Price: " + getAverageBuyPrice();
+            " - Number of Buy Orders: " + getNumOfBuyOrders() +
+            " - Overall Sell Quantity: " + getSellQuantity() + 
+            " - Overall Buy Quantity: " + getBuyQuantity() +
+            " - Average Sale Price: " + getAverageSellPrice() +
+            " - Average Buy Price: " + getAverageBuyPrice();
     }
     
     //clears lists in service layer
@@ -352,8 +359,8 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         Order buy = buyList.get(0);
         Order sell = sellList.get(0);
         //gets the smallest quantity of the two orders
-        int quantity = getSmallest(buy.getQuantity(), sell.getQuantity());
-        System.out.println("quantity: " + quantity);
+        int quantity = Math.min(buy.getQuantity(), sell.getQuantity());
+        
         //execution price will be sell orders price
         BigDecimal price = sell.getPrice();
         
@@ -364,14 +371,12 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         updateAfterMatch(buy, sell);
         //create trade object
         Trade trade = new Trade(buy, sell, quantity, price);
-        System.out.println("quantity" + trade.getQuantityFilled());
-        System.out.println("1");
+        
         validateTrade(trade);
-        System.out.println("2");
+        
         //add trade object in dao
         tradeDao.addTrade(trade.getID(), trade);
 
-        System.out.println(trade.getExecutionTime() + " TIME ");
         return trade;
     }
     
@@ -403,15 +408,6 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         }
     }
     
-    //method to return the smallest of two ints
-    public int getSmallest(int a, int b){
-        if(a > b){
-            return b;
-        }else{
-            return a;
-        }
-    }
-    
     public void validateOrder(Order order) throws OrderBookOrderException{
         if(order.getID().isBlank()){
             throw new OrderBookOrderException("Order ID cannot be blank");
@@ -425,7 +421,6 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     }
     
     public void validateTrade(Trade trade) throws OrderBookTradeException{
-        System.out.println(trade.toString());
         if(trade.getID().isBlank()){
             throw new OrderBookTradeException("Trade ID cannot be blank");
         }
