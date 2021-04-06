@@ -42,7 +42,7 @@ public interface OrderBookServiceLayer {
      * @return a list consisting of 2 sorted lists of orders (buy orders, sell orders)
      * @throws OrderBookOrderException if one of the orders is invalid
      */
-    List<List<Order>> getAllOrders() throws OrderBookOrderException;
+    List<List<Order>> getAllOrdersByPrice() throws OrderBookOrderException;
     /**
      * Wraps the removeOrder method for the DAO
      * @param orderId the ID of the order being removed

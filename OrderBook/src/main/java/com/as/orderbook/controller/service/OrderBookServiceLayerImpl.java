@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -74,7 +75,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     
     //returns a list of lists - one for buy orders - one for sell orders
     @Override
-    public List<List<Order>> getAllOrders() throws OrderBookOrderException{
+    public List<List<Order>> getAllOrdersByPrice() throws OrderBookOrderException{
         List <Order> orders = orderDao.getAllOrders();
         if(orders.isEmpty()){
             throw new OrderBookOrderException("There are no orders");
@@ -104,7 +105,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         return allOrders;
     }
     
-    public List<List<Order>> getOrdersByQuantity() throws OrderBookOrderException{ //Copypaste of getAllOrders but sorted by quantity instead of price
+    public List<List<Order>> getAllOrdersByQuantity() throws OrderBookOrderException{ //Copypaste of getAllOrders but sorted by quantity instead of price
         List <Order> orders = orderDao.getAllOrders();
         if(orders.isEmpty()){
             throw new OrderBookOrderException("There are no orders");
@@ -132,6 +133,10 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         
         //return list
         return allOrders;
+    }
+    
+    public List<Order> getOrdersByQuantity(Integer quantity) {
+        return orderDao.getAllOrders().stream().filter(i -> i.getQuantity() == quantity).collect(Collectors.toList());
     }
     
     //remove Order by ID
