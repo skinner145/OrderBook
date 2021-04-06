@@ -50,7 +50,7 @@ public class UserIOConsoleImpl implements UserIO{
     @Override
     public int readInt(String prompt){
         print(prompt);
-        return userInput.nextInt();
+        return Integer.parseInt(userInput.nextLine());
     }
     
     @Override

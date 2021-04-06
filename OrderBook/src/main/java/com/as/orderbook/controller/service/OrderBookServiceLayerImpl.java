@@ -409,7 +409,6 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     }
     
     public void validateOrder(Order order) throws OrderBookOrderException{
-        System.out.println(order.toString());
         if(order.getID().isBlank()){
             throw new OrderBookOrderException("Order ID cannot be blank");
         }

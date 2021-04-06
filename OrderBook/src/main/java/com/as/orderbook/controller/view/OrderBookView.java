@@ -8,6 +8,7 @@ package com.as.orderbook.controller.view;
 import com.as.orderbook.controller.service.OrderBookTradeException;
 import com.as.orderbook.dto.BuyOrder;
 import com.as.orderbook.dto.Order;
+import com.as.orderbook.dto.SellOrder;
 import com.as.orderbook.dto.Trade;
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,7 +37,7 @@ public class OrderBookView {
             io.print("1. Order Menu");
             io.print("2. Trade Menu");
             io.print("3. Exit Program");;
-            input = inputReader.nextInt();
+            input = Integer.parseInt(inputReader.nextLine());
             if (checkInput(input, 1, 3)) {
                 correctInput = true;
             }
@@ -54,7 +55,7 @@ public class OrderBookView {
             io.print("4. Edit Order");
             io.print("5. Display OrderBook Stats");
             io.print("6. Back to Main Menu");
-            input = inputReader.nextInt();
+            input = Integer.parseInt(inputReader.nextLine());
             if(checkInput(input, 1, 6)){
                 correctInput = true;
             }
@@ -72,7 +73,7 @@ public class OrderBookView {
             io.print("3. Match Order");
             io.print("4. Match All Orders");
             io.print("5. Back to Main Menu");
-            input = inputReader.nextInt();
+            input = Integer.parseInt(inputReader.nextLine());
             if(checkInput(input, 1, 5)){
                 correctInput = true;
             }
@@ -90,7 +91,7 @@ public class OrderBookView {
             System.out.println("3. View A Trade");
             System.out.println("4. View All Trades (Sorted by exection time)");
             System.out.println("5. Return To Menu");
-            input = inputReader.nextInt();
+            input = Integer.parseInt(inputReader.nextLine());
             if (checkInput(input, 1, 5)) {
                 correctInput = true;
             }
@@ -108,10 +109,16 @@ public class OrderBookView {
         io.printOrderList(orders1, orders2);
     }
     
-    public Order getNewOrderInfo(){
+    public Order getNewBuyOrderInfo(){
         BigDecimal price = io.readBigDecimal("Please input the price of the buy order", BigDecimal.ZERO);
         int quantity = io.readInt("Please input the quantity");
         return new BuyOrder(price, quantity);
+    }
+    
+    public Order getNewSellOrderInfo(){
+        BigDecimal price = io.readBigDecimal("Please input the price of the sell order", BigDecimal.ZERO);
+        int quantity = io.readInt("Please input the quantity");
+        return new SellOrder(price, quantity);
     }
     
     public Order editOrderInfo(Order order){

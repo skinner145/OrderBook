@@ -148,7 +148,7 @@ public class OrderBookController {
     
     public void addBuyOrder() throws OrderBookOrderException{
         try{
-            Order order = view.getNewOrderInfo();
+            Order order = view.getNewBuyOrderInfo();
             System.out.println(order.getID());
             service.addOrder(order.getID(), order);
         }catch(NumberFormatException e){
@@ -158,7 +158,7 @@ public class OrderBookController {
     
     public void addSellOrder() throws OrderBookOrderException{
         try{
-            Order order = view.getNewOrderInfo();
+            Order order = view.getNewSellOrderInfo();
             System.out.println(order.getID());
             service.addOrder(order.getID(), order);
         }catch(NumberFormatException e){
