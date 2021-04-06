@@ -41,68 +41,78 @@ public class OrderBookController {
         createOrders(25);
         
         while (keepRunning) {
-            boolean keepShowingOrders = true;
-            boolean keepShowingTradeMenu = true;
+            boolean keepShowingOrderMenu = true;
+            
+            
             input = view.printMenuAndGetSelection();
             switch (input) {
                 case 1:
-                    while(keepShowingOrders){
-                        viewOrders();
-                        System.out.println(page);
-                        input = view.selectPage();
+                    boolean keepShowingOrders = true;
+                    while(keepShowingOrderMenu){
+                        input = view.orderMenu();
                         switch(input){
                             case 1:
-                                changePage(PageChoices.PREVIOUS);
+                                while(keepShowingOrders){
+                                    viewOrders();
+                                    input = view.selectPage();
+                                    switch(input){
+                                    case 1:
+                                        changePage(PageChoices.PREVIOUS);
+                                        break;
+                                    case 2:
+                                        changePage(PageChoices.NEXT);
+                                        break;
+                                    case 3:
+                                        keepShowingOrders = false;
+                                        break;
+                                    default:
+                                        view.unknownCommand();
+                                    }
+                                }
                                 break;
-                            case 2:
-                                changePage(PageChoices.NEXT);
-                                break;
-                            case 3:
-                                keepShowingOrders = false;
-                                break;
-                            default:
-                                view.unknownCommand();
+                                case 2:
+                                    addBuyOrder();
+                                    break;
+                                case 3:
+                                    addSellOrder();
+                                    break;
+                                case 4:
+                                    editOrder();
+                                    break;
+                                case 5:
+                                    displayStats();
+                                    break;
+                                case 6:
+                                    keepShowingOrderMenu = false;
+                                    break;
+                                
                         }
                     }
                     break;
                 case 2:
-                    addBuyOrder();
-                    break;
-                case 3:
-                    addSellOrder();
-                    break;
-                case 4:
-                    editOrder();
-                    break;
-                case 5:
-                    displayStats();
-                    break;
-                case 6:
+                    boolean keepShowingTradeMenu = true;
                     while(keepShowingTradeMenu){
-                        input = view.manageOrders();
-                        switch(input) {
+                        input = view.tradeMenu();
+                        switch(input){
                             case 1:
-                                matchOrder();
-                                break;
-                            case 2:
-                                matchAllOrders();
-                                break;
-                            case 3:
                                 viewTrade();
                                 break;
-                            case 4:
+                            case 2:
                                 viewAllTrades();
+                                break;
+                            case 3:
+                                matchOrder();
+                                break;
+                            case 4:
+                                matchAllOrders();
                                 break;
                             case 5:
                                 keepShowingTradeMenu = false;
                                 break;
-                            default:
-                                view.unknownCommand();
-                                break;
                         }
                     }
                     break;
-                case 7:
+                case 3:
                     System.out.println("Exiting program...");
                     keepRunning = false;
                     break;

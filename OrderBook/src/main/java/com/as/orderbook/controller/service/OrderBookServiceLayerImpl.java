@@ -351,6 +351,7 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
         updateAfterMatch(buy, sell);
         //create trade object
         Trade trade = new Trade(buy, sell, quantity, price);
+        System.out.println("quantity" + trade.getQuantityFilled());
         validateObject(trade);
         //add trade object in dao
         tradeDao.addTrade(trade.getID(), trade);
@@ -408,15 +409,16 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     }
     
     public void validateObject(Trade trade) throws OrderBookTradeException{
+        System.out.println(trade.toString());
         if(trade.getID().isBlank()){
             throw new OrderBookTradeException("Trade ID cannot be blank");
         }
         if(trade.getExecutedPrice().compareTo(BigDecimal.ZERO) != 1){
             throw new OrderBookTradeException("Execution price must be greater than 0");
         }
-        if(trade.getQuantityFilled() <=0 ){
-            throw new OrderBookTradeException("Quantity filled must be greater than 0");
-        }
+//        if(trade.getQuantityFilled() <=0 ){
+//            throw new OrderBookTradeException("Quantity filled must be greater than 0");
+//        }
         if(trade.getExecutionTime() == 0.0d){
             throw new OrderBookTradeException("Execution Time cannot be null");
         }

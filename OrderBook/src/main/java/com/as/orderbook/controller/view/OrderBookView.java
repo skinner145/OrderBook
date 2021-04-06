@@ -23,26 +23,57 @@ import org.springframework.stereotype.Component;
 public class OrderBookView {
     private UserIO io;
     
-    
+    Scanner inputReader = new Scanner(System.in);
     public OrderBookView(UserIO io){
         this.io = io;
     }
     
     public Integer printMenuAndGetSelection() {
-        Scanner inputReader = new Scanner(System.in);
         Boolean correctInput = false;
         Integer input = 0;
         while (!correctInput) {
             io.print("<<Orderbook>>");
-            io.print("1. View Orderbook");
+            io.print("1. Order Menu");
+            io.print("2. Trade Menu");
+            io.print("3. Exit Program");;
+            input = inputReader.nextInt();
+            if (checkInput(input, 1, 3)) {
+                correctInput = true;
+            }
+        }
+        return input;
+    }
+    
+    public Integer orderMenu(){
+        boolean correctInput = false;
+        Integer input = 0;
+        while(!correctInput){
+            io.print("1. View OrderBook");
             io.print("2. Add Buy Order");
             io.print("3. Add Sell Order");
             io.print("4. Edit Order");
-            io.print("5. Display Order Book Stats");
-            io.print("6. Manage Orders");
-            io.print("7. Exit Program");
+            io.print("5. Display OrderBook Stats");
+            io.print("6. Back to Main Menu");
             input = inputReader.nextInt();
-            if (checkInput(input, 1, 7)) {
+            if(checkInput(input, 1, 6)){
+                correctInput = true;
+            }
+        }
+        return input;
+    }
+    
+    
+    public Integer tradeMenu(){
+        boolean correctInput = false;
+        Integer input = 0;
+        while(!correctInput){
+            io.print("1. View Trade");
+            io.print("2. View All Trades");
+            io.print("3. Match Order");
+            io.print("4. Match All Orders");
+            io.print("5. Back to Main Menu");
+            input = inputReader.nextInt();
+            if(checkInput(input, 1, 5)){
                 correctInput = true;
             }
         }
@@ -50,7 +81,7 @@ public class OrderBookView {
     }
     
     public Integer manageOrders() {
-        Scanner inputReader = new Scanner(System.in);
+        
         Boolean correctInput = false;
         Integer input = 0;
         while (!correctInput) {
