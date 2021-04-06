@@ -122,7 +122,7 @@ public class OrderBookController {
     }
     public void viewOrders()throws OrderBookOrderException{
         try{
-            List<List<Order>> allOrders = service.getAllOrders();
+            List<List<Order>> allOrders = service.getAllOrdersByPrice();
             allOrders = getCurrentOrders(allOrders);
             view.displayOrders(allOrders);
         }catch(OrderBookOrderException e){
@@ -169,7 +169,7 @@ public class OrderBookController {
     
     public void matchOrder()throws OrderBookTradeException, OrderBookOrderException{
         try{
-            List<List<Order>> allOrders = service.getAllOrders();
+            List<List<Order>> allOrders = service.getAllOrdersByPrice();
             Trade matchedOrder = service.matchOrder(allOrders.get(0), allOrders.get(1));
             System.out.println(matchedOrder.getExecutionTime());
             view.displayTrade(matchedOrder);
