@@ -338,14 +338,15 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //if buy orders or sell orders = 0 or less - order book is empty
     @Override
     public boolean checkIfEmpty(){
-        System.out.println("buy orders left: " + getNumOfBuyOrders());
-        System.out.println("sell orders left: " + getNumOfSellOrders());
         return (getNumOfBuyOrders() <= 0 || getNumOfSellOrders() <= 0);
     }
     
     //matches sell order with buy order
     @Override
     public Trade matchOrder(List<Order> buyList, List<Order> sellList) throws OrderBookOrderException, OrderBookTradeException{
+        if(checkIfEmpty()){
+            throw new OrderBookTradeException("Order Book is empty");
+        }
         //gets the buy and sell order with the highest price
         Order buy = buyList.get(0);
         Order sell = sellList.get(0);
@@ -376,11 +377,11 @@ public class OrderBookServiceLayerImpl implements OrderBookServiceLayer{
     //method to match all orders
     @Override
     public void matchAllOrders() throws OrderBookTradeException, OrderBookOrderException{
-        while(!checkIfEmpty()){
+        do{
             List<List<Order>> orderList = getAllOrdersByPrice();
             //match order method
             matchOrder(orderList.get(0), orderList.get(1));
-        }
+        }while(!checkIfEmpty());
     }
     
     //method to update orders in dao
