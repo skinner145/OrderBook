@@ -47,11 +47,11 @@ public class OrderBookController {
             input = view.printMenuAndGetSelection();
             switch (input) {
                 case 1:
-                    boolean keepShowingOrders = true;
                     while(keepShowingOrderMenu){
                         input = view.orderMenu();
                         switch(input){
                             case 1:
+                                boolean keepShowingOrders = true;
                                 while(keepShowingOrders){
                                     viewOrders();
                                     input = view.selectPage();
@@ -133,6 +133,9 @@ public class OrderBookController {
     public void viewOrders()throws OrderBookOrderException{
         try{
             List<List<Order>> allOrders = service.getAllOrdersByPrice();
+            System.out.println("all orders" + allOrders.size());
+            System.out.println("buy orders" + allOrders.get(0).size());
+            System.out.println("sell orders" + allOrders.get(1).size());
             allOrders = getCurrentOrders(allOrders);
             view.displayOrders(allOrders);
         }catch(OrderBookOrderException e){

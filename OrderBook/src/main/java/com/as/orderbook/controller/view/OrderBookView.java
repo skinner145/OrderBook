@@ -125,7 +125,7 @@ public class OrderBookView {
         io.print("Order price: " + order.getPrice());
         BigDecimal newPrice = io.readBigDecimal("Please enter the new price for the order", BigDecimal.ZERO);
         io.print("Order quantity: " + order.getQuantity());
-        int quantity = io.readInt("Please input a new price for the order");
+        int quantity = io.readInt("Please input a new quantity for the order");
         
         Order editedOrder = order;
         editedOrder.setPrice(newPrice);
