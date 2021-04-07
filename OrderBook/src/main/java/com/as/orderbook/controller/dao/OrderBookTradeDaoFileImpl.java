@@ -33,7 +33,7 @@ public class OrderBookTradeDaoFileImpl implements OrderBookTradeDao{
     
     //gets trade from map by DateTime
     @Override
-    public Trade getTrade(LocalDateTime dateTime) throws OrderBookTradeException{
+    public Trade getTrade(LocalDateTime dateTime)throws OrderBookTradeException{
         for(Trade i: getAllTrades()) {
             if (i.getDateTime().equals(dateTime)) {
                 return i;

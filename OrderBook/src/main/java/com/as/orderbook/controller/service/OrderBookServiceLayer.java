@@ -39,7 +39,8 @@ public interface OrderBookServiceLayer {
     Order getOrder(String orderId) throws OrderBookOrderException;
     /**
      * Returns lists of orders sorted by price
-     * @return a list consisting of 2 sorted lists of orders (buy orders, sell orders)
+     * @return a list consisting of 2 sorted lists of orders (buy orders, 
+     * sell orders)
      * @throws OrderBookOrderException if one of the orders is invalid
      */
     List<List<Order>> getAllOrdersByPrice() throws OrderBookOrderException;
@@ -57,7 +58,8 @@ public interface OrderBookServiceLayer {
      * @return the updated order
      * @throws OrderBookOrderException if the new order is invalid
      */
-    Order editOrder(String orderId, Order editedOrder) throws OrderBookOrderException;
+    Order editOrder(String orderId, Order editedOrder) throws 
+            OrderBookOrderException;
     /**
      * Wraps the addTrade method of the DAO
      * @param tradeId the ID of the trade object to be added
@@ -86,7 +88,8 @@ public interface OrderBookServiceLayer {
      */
     List<Trade> getAllTrades() throws OrderBookTradeException ;
     /**
-     * Returns a list of trades matching a quantity filled sorted by execution time
+     * Returns a list of trades matching a quantity filled sorted by 
+     * execution time
      * @param quantity the specified quantity
      * @return a sorted list of trades matching the quantity
      */
@@ -105,7 +108,8 @@ public interface OrderBookServiceLayer {
      * @return the updated trade
      * @throws OrderBookTradeException if the new trade is invalid
      */
-    Trade editTrade(String tradeId, Trade editedTrade) throws OrderBookTradeException;
+    Trade editTrade(String tradeId, Trade editedTrade) throws 
+            OrderBookTradeException;
     /**
      * Counts the number of sell orders in the DAO
      * @return the number of sell orders
@@ -127,17 +131,20 @@ public interface OrderBookServiceLayer {
      */
     int getBuyQuantity();
     /**
-     * Sums the price for each sell order in the DAO, and divides by the number of orders
+     * Sums the price for each sell order in the DAO, and divides by the 
+     * number of orders
      * @return the average sell price
      */
     BigDecimal getAverageSellPrice();
     /**
-     * Sums the price for each buy order in the DAO, and divides by the number of orders
+     * Sums the price for each buy order in the DAO, and divides by the 
+     * number of orders
      * @return the average buy price
      */
     BigDecimal getAverageBuyPrice();
     /**
-     * Converts getNumOfSellOrders, getNumOfBuyOrders, getSellQuantity, getBuyQuantity, getAverageSellPrice, getAverageBuyPrice into one string
+     * Converts getNumOfSellOrders, getNumOfBuyOrders, getSellQuantity, 
+     * getBuyQuantity, getAverageSellPrice, getAverageBuyPrice into one string
      * @return string showing various stats about the DAO
      */
     String displayStats() throws OrderBookOrderException;
@@ -155,27 +162,33 @@ public interface OrderBookServiceLayer {
      * @param buyList a sorted list of the buy orders to use
      * @param sellList a sorted list of the sell orders to use
      * @return the resulting trade
-     * @throws OrderBookOrderException if one of the orders being matched is invalid
+     * @throws OrderBookOrderException if one of the orders being matched i
+     * s invalid
      * @throws OrderBookTradeException if the created trade is invalid
      */
-    Trade matchOrder(List<Order> buyList, List<Order> sellList) throws OrderBookOrderException, OrderBookTradeException;
+    Trade matchOrder(List<Order> buyList, List<Order> sellList) throws 
+            OrderBookOrderException, OrderBookTradeException;
     /**
      * Runs the matchOrder method until there are no possible trades left
      * @throws OrderBookTradeException if one of the created trades is invalid
      * @throws OrderBookOrderException if one of the orders is invalid
      */
-    void matchAllOrders()throws OrderBookTradeException, OrderBookOrderException;
+    void matchAllOrders()throws OrderBookTradeException, 
+            OrderBookOrderException;
     /**
      * Returns lists of orders sorted by quantity
-     * @return a list consisting of 2 sorted lists of orders (buy orders, sell orders)
+     * @return a list consisting of 2 sorted lists of orders (buy orders, 
+     * sell orders)
      * @throws OrderBookOrderException if one of the orders is invalid
      */
     List<List<Order>> getAllOrdersByQuantity() throws OrderBookOrderException;
     /**
      * Returns lists of orders with a specified quantity sorted by price
      * @param quantity the specified quantity
-     * @return a list consisting of 2 sorted lists of orders (buy orders, sell orders) matching quantity
+     * @return a list consisting of 2 sorted lists of orders (buy orders, 
+     * sell orders) matching quantity
      * @throws OrderBookOrderException if one of the orders is invalid
      */
-    List<List<Order>> getOrdersByQuantity(Integer quantity) throws OrderBookOrderException;
+    List<List<Order>> getOrdersByQuantity(Integer quantity) throws 
+            OrderBookOrderException;
 }

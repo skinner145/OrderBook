@@ -17,11 +17,15 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * @author Skininho
  */
 public class App {
-    public static void main(String[] args) throws OrderBookOrderException, OrderBookTradeException, OrderBookIDException {
-        AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext(SpringConfig.class);
-        ((AnnotationConfigApplicationContext)appContext).scan("com.sg.flooringmastery.controller");
+    public static void main(String[] args) throws OrderBookOrderException, 
+            OrderBookTradeException, OrderBookIDException {
+        AnnotationConfigApplicationContext appContext = 
+                new AnnotationConfigApplicationContext(SpringConfig.class);
+        ((AnnotationConfigApplicationContext)appContext).scan(
+                "com.sg.flooringmastery.controller");
         
-        OrderBookController controller = (OrderBookController) appContext.getBean("mainController");
+        OrderBookController controller = (OrderBookController) 
+                appContext.getBean("mainController");
         
         controller.run();
     }

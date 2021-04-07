@@ -22,7 +22,8 @@ public class Trade {
     private Order sellOrder;
     private LocalDateTime dateTime;
 
-    public Trade(Order buyOrder, Order sellOrder, Integer quantityFilled, BigDecimal executedPrice) {
+    public Trade(Order buyOrder, Order sellOrder, Integer quantityFilled, 
+            BigDecimal executedPrice) {
         Double startTime = (double)System.nanoTime();
         this.buyOrder = buyOrder;
         this.sellOrder = sellOrder;
@@ -31,7 +32,9 @@ public class Trade {
         this.dateTime = LocalDateTime.now();
         this.ID = "TRADE" + this.quantityFilled + dateTime.toString();
         Double endTime = (double)System.nanoTime();
-        this.executionTime = (endTime - startTime) / 1000000; //Getting the execution time of the constructor
+        
+        //Getting the execution time of the constructor
+        this.executionTime = (endTime - startTime) / 1000000; 
     }
 
     public LocalDateTime getDateTime() {
@@ -110,8 +113,9 @@ public class Trade {
 
     @Override
     public String toString() {
-        return "Trade{" + "ID=" + ID + ", executionTime=" + executionTime + ", quantityFilled=" + quantityFilled + ", executedPrice=" + executedPrice + ", buyOrder=" + buyOrder + ", sellOrder=" + sellOrder + '}';
-    }
-    
-    
+        return "Trade{" + "ID=" + ID + ", executionTime=" + executionTime + 
+                ", quantityFilled=" + quantityFilled + ", executedPrice=" + 
+                executedPrice + ", buyOrder=" + buyOrder + ", sellOrder=" + 
+                sellOrder + '}';
+    }  
 }

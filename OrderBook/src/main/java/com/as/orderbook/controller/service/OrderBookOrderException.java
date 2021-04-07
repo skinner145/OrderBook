@@ -9,6 +9,7 @@ package com.as.orderbook.controller.service;
  *
  * @author Skininho
  */
+//exception for Order objects
 public class OrderBookOrderException extends Exception{
     public OrderBookOrderException(String e) {
         super(e);

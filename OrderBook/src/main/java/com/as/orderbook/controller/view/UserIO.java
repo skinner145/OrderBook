@@ -22,7 +22,6 @@ public interface UserIO {
     int getMenuSelection(String[] options, int min, int max);
     int readInt(String prompt, int min);
     int readInt(String prompt, int min, int max);
-    BigDecimal readBigDecimal(String prompt, BigDecimal min);
     BigDecimal readBigDecimal(String prompt, BigDecimal min, BigDecimal max);
     String readString(String prompt);
 }

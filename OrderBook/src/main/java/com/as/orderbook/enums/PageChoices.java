@@ -9,6 +9,7 @@ package com.as.orderbook.enums;
  *
  * @author Skininho
  */
+//enum for pagination options
 public enum PageChoices {
     PREVIOUS, NEXT
 }

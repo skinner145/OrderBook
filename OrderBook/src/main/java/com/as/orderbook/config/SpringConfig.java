@@ -26,7 +26,8 @@ public class SpringConfig {
         UserIO io = new UserIOConsoleImpl();
         OrderBookController controller = new OrderBookController(
                 new OrderBookView(io), 
-                new OrderBookServiceLayerImpl(new OrderBookOrderDaoFileImpl(), new OrderBookTradeDaoFileImpl()));
+                new OrderBookServiceLayerImpl(new OrderBookOrderDaoFileImpl(), 
+                        new OrderBookTradeDaoFileImpl()));
         return controller;
     }
 }
